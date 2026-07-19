@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import TodoInput from "./TodoInput"
 import TodoList from "./TodoList"
 import TodoFilters from './TodoFilters'
+import {sortedList} from '../../utils/helpers'
 
 function TodoApp() {
 
@@ -13,6 +14,7 @@ function TodoApp() {
     const [selectedUpdateId, setSelectedUpdateId] = useState(null)
     const [filter, setFilter] = useState('all')
     const [search, setSearch] = useState('')
+    const [seletedSortOption, setSeletedSortOption] = useState('newest')
 
     let filteredTodos =
         (filter === 'all')
@@ -23,6 +25,8 @@ function TodoApp() {
 
     const lowerSearchText = search.trim().toLowerCase()
     filteredTodos = filteredTodos.filter((item)=>{ return item.value.toLowerCase().includes(lowerSearchText)})
+
+    filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
 
     const handleAddTodo = () => {
 
@@ -36,7 +40,6 @@ function TodoApp() {
         setTodoItems((prev) => {
             return [newTodo, ...prev]
         })
-        console.log(todoItems)
         setInput('')
     }
 
@@ -60,7 +63,6 @@ function TodoApp() {
     }
 
     const handleStatus = (status, id) => {
-        console.log(status, id)
         const updatedList = todoItems.map(todo => {
             return id === todo.id
                 ? {
@@ -69,7 +71,6 @@ function TodoApp() {
                 } :
                 todo
         })
-        console.log(updatedList)
         setTodoItems(updatedList)
     }
 
@@ -98,10 +99,13 @@ function TodoApp() {
     const handleSearch = (searchTerm) => {
         setSearch(searchTerm)
     }
+    const handleSort = (selectedOption) =>{
+        setSeletedSortOption(selectedOption)
+    }
 
     return (
         <div>
-            <TodoFilters handleFilter={handleFilter} activeFilter={filter} handleSearch={handleSearch} />
+            <TodoFilters handleFilter={handleFilter} activeFilter={filter} handleSearch={handleSearch} seletedSortOption={seletedSortOption} handleSort={handleSort} />
             <TodoInput input={input} handleAddTodo={handleAddTodo} handleUpdateItem={handleUpdateItem} handleCancelUpdate={handleCancelUpdate} handleInputChange={handleInputChange} isUpdate={isUpdate} />
             <TodoList filteredTodos={filteredTodos} handleDelete={handleDelete} handleEdit={handleEdit} handleStatus={handleStatus} />
         </div>

@@ -2,7 +2,6 @@
 import TodoItem from "./TodoItem"
 
 function TodoList({ filteredTodos, handleDelete, handleEdit, handleStatus }) {
-    console.log(filteredTodos, "List")
     return (
         <div className="pad_5">
             {filteredTodos.length === 0 && <div>No Records Found!</div>}
