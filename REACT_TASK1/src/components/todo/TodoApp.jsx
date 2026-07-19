@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import TodoInput from "./TodoInput"
 import TodoList from "./TodoList"
 import TodoFilters from './TodoFilters'
-import {sortedList} from '../../utils/helpers'
+import {sortedList} from '../../utils/helpers' 
 
 function TodoApp() {
 
