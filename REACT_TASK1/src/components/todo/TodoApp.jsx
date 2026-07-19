@@ -1,24 +1,9 @@
 // Should own the states
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TodoInput from "./TodoInput"
 import TodoList from "./TodoList"
 import TodoFilters from './TodoFilters'
-
-const todoFilterLabels = [
-    {
-        'label': 'All',
-        'value': 'all'
-    },
-    {
-        'label': 'Completed',
-        'value': 'completed'
-    },
-    {
-        'label': 'Active',
-        'value': 'active'
-    }
-]
 
 function TodoApp() {
 
@@ -27,12 +12,17 @@ function TodoApp() {
     const [isUpdate, setIsUpdate] = useState(false)
     const [selectedUpdateId, setSelectedUpdateId] = useState(null)
     const [filter, setFilter] = useState('all')
-    const filteredTodos =
-            (filter === 'all')
-                ? todoItems
-                : todoItems.filter(item => {
-                    if (item.status === filter) return item
-                })
+    const [search, setSearch] = useState('')
+
+    let filteredTodos =
+        (filter === 'all')
+            ? todoItems
+            : todoItems.filter(item => {
+                if (item.status === filter) return item
+            })
+
+    const lowerSearchText = search.trim().toLowerCase()
+    filteredTodos = filteredTodos.filter((item)=>{ return item.value.toLowerCase().includes(lowerSearchText)})
 
     const handleAddTodo = () => {
 
@@ -105,11 +95,15 @@ function TodoApp() {
         setFilter(selectedLabel)
     }
 
+    const handleSearch = (searchTerm) => {
+        setSearch(searchTerm)
+    }
+
     return (
         <div>
-            <TodoFilters todoFilterLabels={todoFilterLabels} handleFilter={handleFilter} activeFilter={filter} />
+            <TodoFilters handleFilter={handleFilter} activeFilter={filter} handleSearch={handleSearch} />
             <TodoInput input={input} handleAddTodo={handleAddTodo} handleUpdateItem={handleUpdateItem} handleCancelUpdate={handleCancelUpdate} handleInputChange={handleInputChange} isUpdate={isUpdate} />
-            <TodoList filteredTodos={filteredTodos} list={todoItems} handleDelete={handleDelete} handleEdit={handleEdit} handleStatus={handleStatus} />
+            <TodoList filteredTodos={filteredTodos} handleDelete={handleDelete} handleEdit={handleEdit} handleStatus={handleStatus} />
         </div>
     )
 }
