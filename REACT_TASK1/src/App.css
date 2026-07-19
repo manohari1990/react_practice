@@ -18,6 +18,12 @@ body{
     margin: 5px;
 }
 
+.active{
+    background-color: #fff;
+    border: 1px solid brown;
+    color: brown;
+}
+
 .primary__input{
     border: 1px solid #ccc;
     border-color: brown;

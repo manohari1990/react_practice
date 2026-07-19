@@ -2,7 +2,6 @@
 // input, Add button
 
 function TodoInput({input, handleAddTodo, handleUpdateItem, handleCancelUpdate, handleInputChange, isUpdate}) {
-    console.log(isUpdate, "Input")
     return(
         <div className="row_content">
             <div>
