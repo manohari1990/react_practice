@@ -4,7 +4,9 @@ import { useEffect, useState } from "react"
 import TodoInput from "./TodoInput"
 import TodoList from "./TodoList"
 import TodoFilters from './TodoFilters'
-import {sortedList} from '../../utils/helpers' 
+import TodoPagination from './TodoPagination'
+import {sortedList} from '../../utils/helpers'
+import {RecordsPerPage} from '../../utils/Constants'
 
 function TodoApp() {
 
@@ -17,6 +19,8 @@ function TodoApp() {
     const [filter, setFilter] = useState('all')
     const [search, setSearch] = useState('')
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
+    const [pageNumber, setPageNumber] = useState(1)
+    
     
     let filteredTodos = todoItems.length > 0 ?
         (filter === 'all')
@@ -27,11 +31,16 @@ function TodoApp() {
     const lowerSearchText = search.trim().toLowerCase()
     filteredTodos = filteredTodos.filter((item)=>{ return item.value.toLowerCase().includes(lowerSearchText)})
     filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
+    
+    let totalPages = Math.ceil(filteredTodos.length/RecordsPerPage)
+
+    const startIndex = (pageNumber - 1) * RecordsPerPage
+    const endIndex = startIndex + RecordsPerPage
+    const paginatedTodo = filteredTodos.slice(startIndex, endIndex)
 
     useEffect(()=>{
         const stringifyTodo = JSON.stringify(todoItems)
         localStorage.setItem('todoItems', stringifyTodo)
-        console.log(todoItems,'ppp')
     },[todoItems])
 
     const handleAddTodo = () => {
@@ -100,20 +109,28 @@ function TodoApp() {
 
     const handleFilter = (selectedLabel) => {
         setFilter(selectedLabel)
+        setPageNumber(1)
     }
 
     const handleSearch = (searchTerm) => {
         setSearch(searchTerm)
+        setPageNumber(1)
     }
     const handleSort = (selectedOption) =>{
         setSeletedSortOption(selectedOption)
+        setPageNumber(1)
+    }
+
+    const handlePage = (selectedPage) =>{
+        setPageNumber(selectedPage)
     }
 
     return (
         <div>
             <TodoFilters handleFilter={handleFilter} activeFilter={filter} handleSearch={handleSearch} seletedSortOption={seletedSortOption} handleSort={handleSort} />
             <TodoInput input={input} handleAddTodo={handleAddTodo} handleUpdateItem={handleUpdateItem} handleCancelUpdate={handleCancelUpdate} handleInputChange={handleInputChange} isUpdate={isUpdate} />
-            <TodoList filteredTodos={filteredTodos} handleDelete={handleDelete} handleEdit={handleEdit} handleStatus={handleStatus} />
+            <TodoList filteredTodos={paginatedTodo} handleDelete={handleDelete} handleEdit={handleEdit} handleStatus={handleStatus} />
+            <TodoPagination currentPage={pageNumber} totalPages={totalPages} handlePage={handlePage} />
         </div>
     )
 }

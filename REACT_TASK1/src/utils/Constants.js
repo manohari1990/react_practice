@@ -31,3 +31,5 @@ export const SortingLabels = [
         'value': 'z-a'
     }
 ]
+
+export const RecordsPerPage = 10
