@@ -8,34 +8,40 @@ import {sortedList} from '../../utils/helpers'
 
 function TodoApp() {
 
+    const localTodos = localStorage.getItem('todoItems')
+    const savedTodos = localTodos != null ? JSON.parse(localTodos) : []  // !!! can be improved lazy initialization !!!
     const [input, setInput] = useState('')
-    const [todoItems, setTodoItems] = useState([])
+    const [todoItems, setTodoItems] = useState(savedTodos)
     const [isUpdate, setIsUpdate] = useState(false)
     const [selectedUpdateId, setSelectedUpdateId] = useState(null)
     const [filter, setFilter] = useState('all')
     const [search, setSearch] = useState('')
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
-
-    let filteredTodos =
+    
+    let filteredTodos = todoItems.length > 0 ?
         (filter === 'all')
             ? todoItems
             : todoItems.filter(item => {
                 if (item.status === filter) return item
-            })
-
+            }) : []
     const lowerSearchText = search.trim().toLowerCase()
     filteredTodos = filteredTodos.filter((item)=>{ return item.value.toLowerCase().includes(lowerSearchText)})
-
     filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
+
+    useEffect(()=>{
+        const stringifyTodo = JSON.stringify(todoItems)
+        localStorage.setItem('todoItems', stringifyTodo)
+        console.log(todoItems,'ppp')
+    },[todoItems])
 
     const handleAddTodo = () => {
 
         if (input.trim() === '') return;
-
         let newTodo = {
             'id': Date.now(),
             'value': input,
-            'status': 'active'
+            'status': 'active',
+            'createdAt': Date.now()
         }
         setTodoItems((prev) => {
             return [newTodo, ...prev]
