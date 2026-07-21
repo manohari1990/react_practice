@@ -5,7 +5,7 @@ import TodoInput from "./TodoInput"
 import TodoList from "./TodoList"
 import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
-import {sortedList} from '../../utils/helpers'
+import {sortedList, buildPagination} from '../../utils/helpers'
 import {RecordsPerPage} from '../../utils/Constants'
 
 function TodoApp() {
@@ -32,9 +32,9 @@ function TodoApp() {
     filteredTodos = filteredTodos.filter((item)=>{ return item.value.toLowerCase().includes(lowerSearchText)})
     filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
     
-    let totalPages = Math.ceil(filteredTodos.length/RecordsPerPage)
+    const totalPages = Math.ceil(filteredTodos.length/RecordsPerPage)
 
-    const startIndex = (pageNumber - 1) * RecordsPerPage
+    const startIndex = (pageNumber > totalPages ?  (pageNumber -1) - 1 : pageNumber - 1) * RecordsPerPage
     const endIndex = startIndex + RecordsPerPage
     const paginatedTodo = filteredTodos.slice(startIndex, endIndex)
 
@@ -42,6 +42,8 @@ function TodoApp() {
         const stringifyTodo = JSON.stringify(todoItems)
         localStorage.setItem('todoItems', stringifyTodo)
     },[todoItems])
+
+    const displayPages = buildPagination(pageNumber, totalPages)
 
     const handleAddTodo = () => {
 
@@ -61,6 +63,10 @@ function TodoApp() {
     const handleDelete = (id) => {
         const filteredList = todoItems.filter(item => item.id !== id)
         setTodoItems(filteredList)
+        const newPageTotal = Math.ceil(filteredList.length / RecordsPerPage)
+        if(pageNumber > newPageTotal){
+            setPageNumber(pageNumber-1)
+        }
     }
 
     const handleEdit = (id) => {
@@ -130,7 +136,7 @@ function TodoApp() {
             <TodoFilters handleFilter={handleFilter} activeFilter={filter} handleSearch={handleSearch} seletedSortOption={seletedSortOption} handleSort={handleSort} />
             <TodoInput input={input} handleAddTodo={handleAddTodo} handleUpdateItem={handleUpdateItem} handleCancelUpdate={handleCancelUpdate} handleInputChange={handleInputChange} isUpdate={isUpdate} />
             <TodoList filteredTodos={paginatedTodo} handleDelete={handleDelete} handleEdit={handleEdit} handleStatus={handleStatus} />
-            <TodoPagination currentPage={pageNumber} totalPages={totalPages} handlePage={handlePage} />
+            <TodoPagination currentPage={pageNumber} totalPages={totalPages} handlePage={handlePage} displayPages={displayPages} />
         </div>
     )
 }
