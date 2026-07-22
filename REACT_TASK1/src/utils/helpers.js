@@ -15,11 +15,8 @@ export function sortedList(list, seletedSortOption){
         default:
             break;
     }
-
     return list
-    
 }
-
 
 export function buildPagination(currentPage, totalPages) {
     // const pageList = [1, currentPage-1 !==0 ? currentPage-1 : 1, currentPage, currentPage+1 < totalPages ? currentPage+1 : 1 , totalPages]
@@ -48,4 +45,13 @@ export function buildPagination(currentPage, totalPages) {
         }
     }
     return displayPages
+}
+
+export function buildAIPrompt(context, input){
+
+    return {
+        'role': "...",
+        'rules': "...",
+        'input': "..."
+    }
 }
