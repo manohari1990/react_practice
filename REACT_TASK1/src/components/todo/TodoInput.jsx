@@ -16,15 +16,16 @@ function TodoInput({input, handleAddTodo, handleUpdateItem, handleCancelUpdate, 
         <div className="row_content">
             <div>
                 <input placeholder="Enter your todo item" className="primary__input" value={input} onChange={(e)=> handleInputChange(e.target.value)}/>
+                {!isUpdate && !enableListening ? <button className="primary__button" onClick={handleAddTodo}>Add</button> : !enableListening && 
+                    <>
+                        {isUpdate && <button className="primary__button" onClick={handleCancelUpdate}>X</button>}
+                        <button className="primary__button" onClick={handleUpdateItem}>Update</button>
+                    </>
+                }
                 <AISpeechInput captureSpeech={captureSpeech} enableListening={enableListening} setEnableListening={setEnableListening}/>
                 <AIInput input={input} context={"improveTodo"} onAccept={handleInputChange}/>
             </div>
-            {!isUpdate && !enableListening ? <button className="primary__button" onClick={handleAddTodo}>Add</button> : !enableListening && 
-                <>
-                {isUpdate && <button className="primary__button" onClick={handleCancelUpdate}>X</button>}
-                <button className="primary__button" onClick={handleUpdateItem}>Update</button>
-                </>
-            }
+            
         </div>
     )
 }

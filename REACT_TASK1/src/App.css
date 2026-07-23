@@ -16,6 +16,7 @@ body{
     border: 0px;
     padding: 5px 10px;
     margin: 5px;
+    cursor: pointer;
 }
 
 .active{
@@ -35,6 +36,7 @@ body{
     border-color: brown;
     border-radius: 5px;
     padding: 8px;
+    
 }
 
 .text_center{
@@ -75,4 +77,5 @@ body{
     border: 1px solid brown;
     height: 32px;
     border-radius: 5px;
+    cursor: pointer;
 }

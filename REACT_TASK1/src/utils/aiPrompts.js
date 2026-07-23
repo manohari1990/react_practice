@@ -24,7 +24,6 @@ const promptTemplates = {
 export function buildPrompt(context, input){
     if(!promptTemplates[context]){
         throw new Error("Could not found the context! Please try again.")
-        return null
     }
     const template = promptTemplates[context]
     return template.replace('{{PROMPT_INPUT}}', input)

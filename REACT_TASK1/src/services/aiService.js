@@ -18,8 +18,6 @@ export async function generateAIText(prompt){
         return response.text
     }catch (error){
         console.log("Error communicating with Gemeni API:", error)
-        throw new Error("Unable to communicate with Gemini.");
-    }finally{
-
+        throw error;
     }
 }
