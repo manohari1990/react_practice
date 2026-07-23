@@ -4,8 +4,10 @@
 import { useState } from 'react'
 import AISpeechInput from './AISpeechInput'
 import AIInput from './AIInput'
+
 function TodoInput({input, handleAddTodo, handleUpdateItem, handleCancelUpdate, handleInputChange, isUpdate}) {
     const [enableListening, setEnableListening] = useState(false)
+
     const captureSpeech = (response) =>{
         setEnableListening(prev=>!prev)
         // if(!response.error){

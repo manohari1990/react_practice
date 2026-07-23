@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { buildPrompt } from "../../utils/aiPrompts"
 import { generateAIText } from '../../services/aiService'
 
@@ -8,6 +8,10 @@ function AIInput({input, context, onAccept}){
     const [generatedText, setGeneratedText] = useState('')
     const [showConfirm, setShowConfirm] = useState(false)
     const [error, setError] = useState('')
+
+    useEffect(()=>{
+        resetSuggestions()
+    },[input])
 
     const improveText = async () =>{
         if(input.length<1){
@@ -38,7 +42,6 @@ function AIInput({input, context, onAccept}){
 
     return(
         <>
-            
             {!isLoading && !showConfirm &&
                 <button className="primary__button no__bg" onClick={improveText}>✨</button>
             }
