@@ -33,3 +33,4 @@ export const SortingLabels = [
 ]
 
 export const RecordsPerPage = 10
+export const MODEL_NAME = "gemini-3.6-flash";

@@ -47,11 +47,3 @@ export function buildPagination(currentPage, totalPages) {
     return displayPages
 }
 
-export function buildAIPrompt(context, input){
-
-    return {
-        'role': "...",
-        'rules': "...",
-        'input': "..."
-    }
-}

@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const Dotenv = require('dotenv-webpack') // Since I am not using VITE, I am loading basic dotenv to load environment variable from .env
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -40,6 +40,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
+    new Dotenv(), // enable the library to read environment variable
   ],
   resolve: {
     extensions: ['.js', '.jsx'],

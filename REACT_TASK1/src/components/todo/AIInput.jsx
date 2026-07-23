@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { buildAIPrompt } from "../../utils/helpers"
+import { buildPrompt } from "../../utils/aiPrompts"
+import { generateAIText } from '../../services/aiService'
 
 function AIInput({input, context, onAccept}){
 
@@ -8,12 +9,17 @@ function AIInput({input, context, onAccept}){
     const [showConfirm, setShowConfirm] = useState(false)
     const improveText = async () =>{
         setIsLoading(true)
-        const updatedContext = buildAIPrompt(context, input)
-        // const suggestionText = await improveTodo(input);
-        console.log("lets imagine API called, processed and provide enhanced version here")
-        setGeneratedText(suggestionText)
+        const finalPrompt = buildPrompt(context, input)
+        if(finalPrompt === null){
+            console.error("context not found! Please try again.")
+        }else{
+            const generatedText = await generateAIText(finalPrompt)
+            console.log(generatedText,"=====generatedText")
+            console.log("lets imagine API called, processed and provide enhanced version here")
+            setGeneratedText(generatedText)
+            setShowConfirm(true)
+        }
         setIsLoading(false)
-        setShowConfirm(true)
     }
 
     const acceptedSuggestion = () =>{
