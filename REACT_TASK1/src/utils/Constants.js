@@ -34,3 +34,10 @@ export const SortingLabels = [
 
 export const RecordsPerPage = 10
 export const MODEL_NAME = "gemini-3.6-flash";
+export const INITIAL_TODO_FORM  = {
+    id: "",
+    title: "",
+    details: "",
+    status: 'active',
+    createdAt: ''
+}

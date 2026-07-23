@@ -5,9 +5,8 @@ import { useState } from 'react'
 import AISpeechInput from './AISpeechInput'
 import AIInput from './AIInput'
 
-function TodoInput({input, handleAddTodo, handleUpdateItem, handleCancelUpdate, handleInputChange, isUpdate}) {
+function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdate, handleInputChange, isUpdate}) {
     const [enableListening, setEnableListening] = useState(false)
-
     const captureSpeech = (response) =>{
         setEnableListening(prev=>!prev)
         // if(!response.error){
@@ -15,17 +14,59 @@ function TodoInput({input, handleAddTodo, handleUpdateItem, handleCancelUpdate, 
         // }
     }
     return(
-        <div className="row_content">
+        <div className="">
             <div>
-                <input placeholder="Enter your todo item" className="primary__input" value={input} onChange={(e)=> handleInputChange(e.target.value)}/>
-                {!isUpdate && !enableListening ? <button className="primary__button" onClick={handleAddTodo}>Add</button> : !enableListening && 
-                    <>
-                        {isUpdate && <button className="primary__button" onClick={handleCancelUpdate}>X</button>}
-                        <button className="primary__button" onClick={handleUpdateItem}>Update</button>
-                    </>
+                <input 
+                    placeholder="Todo Title" 
+                    className="primary__input" 
+                    name="title" 
+                    value={todoForm.title} 
+                    onChange={(e)=> handleInputChange(e)}
+                />
+                <AISpeechInput 
+                    captureSpeech={captureSpeech} 
+                    enableListening={enableListening} 
+                    setEnableListening={setEnableListening}
+                />
+                <AIInput 
+                    input={todoForm.title} 
+                    context={"improveTodo"} 
+                    onAccept={handleInputChange}
+                />
+            </div>
+            <div>
+                <textarea 
+                    placeholder='Todo Details' 
+                    value={todoForm.details} 
+                    className="primary__input" 
+                    name='details' 
+                    cols={25} 
+                    rows={3} 
+                    onChange={(e)=> handleInputChange(e)}>
+                        {todoForm.details}
+                    </textarea>
+                <AISpeechInput 
+                    captureSpeech={captureSpeech} 
+                    enableListening={enableListening} 
+                    setEnableListening={setEnableListening}
+                />
+                <AIInput 
+                    input={todoForm.title} 
+                    context={"improveTodo"} 
+                    onAccept={handleInputChange}
+                />
+            </div>
+            <div>
+                {!isUpdate && !enableListening ? 
+                    <button className="primary__button" onClick={handleAddTodo}>Add</button> : 
+                    !enableListening && 
+                        <>
+                            {isUpdate && 
+                                <button className="primary__button" onClick={handleCancelUpdate}>X</button>
+                            }
+                            <button className="primary__button" onClick={handleUpdateItem}>Update</button>
+                        </>
                 }
-                <AISpeechInput captureSpeech={captureSpeech} enableListening={enableListening} setEnableListening={setEnableListening}/>
-                <AIInput input={input} context={"improveTodo"} onAccept={handleInputChange}/>
             </div>
             
         </div>
