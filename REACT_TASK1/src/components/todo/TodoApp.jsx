@@ -117,8 +117,7 @@ function TodoApp() {
         handleCancelUpdate()
     }
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target
+    const handleInputChange = (name, value) => {
         setTodoForm((prev) => {
             return {
                 ...prev,

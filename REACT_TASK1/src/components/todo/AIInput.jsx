@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { buildPrompt } from "../../utils/aiPrompts"
 import { generateAIText } from '../../services/aiService'
 
-function AIInput({input, context, onAccept}){
+function AIInput({input, inputName, context, onAccept}){
 
     const [isLoading, setIsLoading] = useState(false)
     const [generatedText, setGeneratedText] = useState('')
@@ -31,7 +31,7 @@ function AIInput({input, context, onAccept}){
     }
 
     const acceptedSuggestion = () =>{
-        onAccept(generatedText)
+        onAccept(inputName, generatedText)
         resetSuggestions()
     }
 

@@ -21,14 +21,16 @@ function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdat
                     className="primary__input" 
                     name="title" 
                     value={todoForm.title} 
-                    onChange={(e)=> handleInputChange(e)}
+                    onChange={(e)=> handleInputChange(e.target.name, e.target.value)}
                 />
                 <AISpeechInput 
-                    captureSpeech={captureSpeech} 
-                    enableListening={enableListening} 
+                    inputName = "title"
+                    captureSpeech={captureSpeech}
+                    enableListening={enableListening}
                     setEnableListening={setEnableListening}
                 />
                 <AIInput 
+                    inputName = "title"
                     input={todoForm.title} 
                     context={"improveTodo"} 
                     onAccept={handleInputChange}
@@ -42,16 +44,18 @@ function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdat
                     name='details' 
                     cols={25} 
                     rows={3} 
-                    onChange={(e)=> handleInputChange(e)}>
+                    onChange={(e)=> handleInputChange(e.target.name, e.target.value)}>
                         {todoForm.details}
                     </textarea>
                 <AISpeechInput 
+                    inputName = "title"
                     captureSpeech={captureSpeech} 
                     enableListening={enableListening} 
                     setEnableListening={setEnableListening}
                 />
                 <AIInput 
-                    input={todoForm.title} 
+                    inputName = "details"
+                    input={todoForm.details} 
                     context={"improveTodo"} 
                     onAccept={handleInputChange}
                 />
@@ -74,20 +78,3 @@ function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdat
 }
 
 export default TodoInput
-
-
-
-// function TodoInput({input, handleAddTodo, handleUpdateItem, handleCancelUpdate, handleInputChange, isUpdate}) {
-//     return(
-//         <div className="row_content">
-//             <div>
-//                 <input placeholder="Enter your todo title" className="primary__input" value={input.title} onChange={(e)=> handleInputChange({'title':e.target.value})}/>{isUpdate && <button className="primary__button" onClick={handleCancelUpdate}>X</button>}
-//                 <textarea placeholder="Enter your todo details" className="primary__input" value={input.detail} onChange={(e)=> handleInputChange({'details':e.target.value})}/>
-//             </div>
-//             {!isUpdate ? <button className="primary__button" onClick={handleAddTodo}>Add</button> : <button className="primary__button" onClick={handleUpdateItem}>Update</button>}
-            
-//         </div>
-//     )
-// }
-
-// export default TodoInput
