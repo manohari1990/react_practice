@@ -31,6 +31,7 @@ function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdat
                             placeholder="Todo Title"
                             onChange={(e)=> handleInputChange(e.target.name, e.target.value)}
                             className="flex-1 w-full rounded-lg border border-gray-300 text-heading text-sm px-3 py-2.5"
+                            required
                         />
                         <AIInput 
                             inputName = "title"
@@ -67,7 +68,9 @@ function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdat
                             name='details' 
                             cols={25} 
                             rows={3} 
-                            onChange={(e)=> handleInputChange(e.target.name, e.target.value)}>
+                            onChange={(e)=> handleInputChange(e.target.name, e.target.value)}
+                            required
+                        >
                                 {todoForm.details}
                         </textarea>
                         <AIInput 
