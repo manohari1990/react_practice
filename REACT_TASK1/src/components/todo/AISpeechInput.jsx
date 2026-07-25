@@ -68,9 +68,22 @@ function AISpeechInput({captureSpeech, enableListening, setEnableListening}){
                 enableListening ?
                 <div>
                     <span>Listening...</span>
-                    <button className="primary__button" onClick={stopListen}>Stop</button>
+                    <button className="rounded-lg px-4 py-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-gray-100 duration-300" onClick={stopListen}>Stop</button>
                 </div>
-                : <button className="no__bg" onClick={startListen}>🎤</button>
+                : <button className="rounded-lg px-4 py-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-gray-100 duration-300" onClick={startListen}>
+                    <svg 
+                        class="w-4 h-4 text-gray-700" 
+                        fill="none" stroke="currentColor" 
+                        stroke-width="2" 
+                        viewBox="0 0 24 24" 
+                        xmlns="http://w3.org">
+                        <path 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                        ></path>
+                    </svg>
+                </button>
             }
         </>
     )

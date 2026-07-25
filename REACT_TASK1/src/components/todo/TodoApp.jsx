@@ -145,34 +145,38 @@ function TodoApp() {
     }
 
     return (
-        <div>
-            <TodoFilters
-                handleFilter={handleFilter}
-                activeFilter={filter}
-                handleSearch={handleSearch}
-                seletedSortOption={seletedSortOption}
-                handleSort={handleSort}
-            />
-            <TodoInput
-                todoForm={todoForm}
-                handleAddTodo={handleAddTodo}
-                handleUpdateItem={handleUpdateItem}
-                handleCancelUpdate={handleCancelUpdate}
-                handleInputChange={handleInputChange}
-                isUpdate={isUpdate}
-            />
-            <TodoList
-                filteredTodos={paginatedTodo}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                handleStatus={handleStatus}
-            />
-            <TodoPagination
-                currentPage={pageNumber}
-                totalPages={totalPages}
-                handlePage={handlePage}
-                displayPages={displayPages}
-            />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-lg mx-auto">
+                <TodoInput
+                    todoForm={todoForm}
+                    handleAddTodo={handleAddTodo}
+                    handleUpdateItem={handleUpdateItem}
+                    handleCancelUpdate={handleCancelUpdate}
+                    handleInputChange={handleInputChange}
+                    isUpdate={isUpdate}
+                />
+            </div>
+            <div>
+                <TodoFilters
+                    handleFilter={handleFilter}
+                    activeFilter={filter}
+                    handleSearch={handleSearch}
+                    seletedSortOption={seletedSortOption}
+                    handleSort={handleSort}
+                />
+                <TodoList
+                    filteredTodos={paginatedTodo}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                    handleStatus={handleStatus}
+                />
+                <TodoPagination
+                    currentPage={pageNumber}
+                    totalPages={totalPages}
+                    handlePage={handlePage}
+                    displayPages={displayPages}
+                />
+            </div>
         </div>
     )
 }

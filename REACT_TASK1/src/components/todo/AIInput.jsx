@@ -43,7 +43,22 @@ function AIInput({input, inputName, context, onAccept}){
     return(
         <>
             {!isLoading && !showConfirm &&
-                <button className="primary__button no__bg" onClick={improveText}>✨</button>
+                <button className="rounded-lg px-4 py-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-gray-100 duration-300" onClick={improveText}>
+                    <svg 
+                        class="w-4 h-4 text-purple-600 dark:text-purple-400 animate-pulse" 
+                        xmlns="http://w3.org" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke-width="1.5" 
+                        stroke="currentColor"
+                    >
+                        <path 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            d="M9.813 15.904 9 21l-.813-5.096L3 15l5.096-.813L9 9l.813 5.187L15 15l-5.187.813ZM18.041 5.041 17 9l-1.041-3.959L12 4l3.959-1.041L17 0l1.041 3.959L22 4l-3.959 1.041ZM19 18l-1.5 1.5L16 18l1.5-1.5L19 18Z" 
+                        />
+                    </svg>
+                </button>
             }
             {!isLoading && showConfirm && 
                 <div>
