@@ -146,6 +146,8 @@ function TodoApp() {
 
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 p-3 text-center">Todo App</h1>
+            <hr class="mb-10 mt-5 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
             <div className="max-w-lg mx-auto">
                 <TodoInput
                     todoForm={todoForm}
@@ -156,7 +158,8 @@ function TodoApp() {
                     isUpdate={isUpdate}
                 />
             </div>
-            <div>
+            <hr class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+            <div className="mx-auto">
                 <TodoFilters
                     handleFilter={handleFilter}
                     activeFilter={filter}

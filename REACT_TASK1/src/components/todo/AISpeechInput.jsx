@@ -72,14 +72,15 @@ function AISpeechInput({captureSpeech, enableListening, setEnableListening}){
                 </div>
                 : <button className="rounded-lg px-4 py-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-gray-100 duration-300" onClick={startListen}>
                     <svg 
-                        class="w-4 h-4 text-gray-700" 
-                        fill="none" stroke="currentColor" 
-                        stroke-width="2" 
+                        className="w-4 h-4 text-white-700" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
                         viewBox="0 0 24 24" 
                         xmlns="http://w3.org">
                         <path 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
                             d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
                         ></path>
                     </svg>

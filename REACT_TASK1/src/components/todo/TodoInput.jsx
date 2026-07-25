@@ -17,19 +17,30 @@ function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdat
         <>
             <div className='pt-5 mb-5'>
                 <label
-                    for="todo-title"
+                    htmlFor="todo-title"
                     className="block mb-2.5 text-sm font-medium text-heading">
                     Todo Title
                 </label>
 
-                <div className="flex items-center gap-2">
-                    <input
-                        id="todo-title"
-                        name="title"
-                        placeholder="Todo Title"
-                        onChange={(e)=> handleInputChange(e.target.name, e.target.value)}
-                        className="flex-1 rounded-lg border border-gray-300 text-heading text-sm px-3 py-2.5"
-                    />
+                <div className="flex items-start gap-2">
+                    <div className='w-full relative'>
+                        <input
+                            id="todo-title"
+                            name="title"
+                            value={todoForm.title}
+                            placeholder="Todo Title"
+                            onChange={(e)=> handleInputChange(e.target.name, e.target.value)}
+                            className="flex-1 w-full rounded-lg border border-gray-300 text-heading text-sm px-3 py-2.5"
+                        />
+                        <AIInput 
+                            inputName = "title"
+                            input={todoForm.title} 
+                            context={"improveTodo"} 
+                            onAccept={handleInputChange}
+                            htmlClass='absolute right-0'
+                        />
+                    </div>
+                    
 
                     <AISpeechInput 
                         inputName = "title"
@@ -37,43 +48,42 @@ function TodoInput({todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdat
                         enableListening={enableListening}
                         setEnableListening={setEnableListening}
                     />
-                    <AIInput 
-                        inputName = "title"
-                        input={todoForm.title} 
-                        context={"improveTodo"} 
-                        onAccept={handleInputChange}
-                    />
+                    
                 </div>
             </div>
             <div className='mb-5'>
                 <label
-                    for="todo-title"
+                    htmlFor="todo-title"
                     className="block mb-2.5 text-sm font-medium text-heading">
                     Todo Details
                 </label>
 
                 <div className="flex items-center gap-2">
-                    <textarea 
-                        placeholder='Todo Details' 
-                        value={todoForm.details} 
-                        className="w-full rounded-lg border-gray-300 border text-heading text-sm px-3 py-2.5" 
-                        name='details' 
-                        cols={25} 
-                        rows={3} 
-                        onChange={(e)=> handleInputChange(e.target.name, e.target.value)}>
-                            {todoForm.details}
+                    <div className='w-full relative'>
+                        <textarea 
+                            placeholder='Todo Details' 
+                            value={todoForm.details} 
+                            className="w-full rounded-lg border-gray-300 border text-heading text-sm px-3 py-2.5" 
+                            name='details' 
+                            cols={25} 
+                            rows={3} 
+                            onChange={(e)=> handleInputChange(e.target.name, e.target.value)}>
+                                {todoForm.details}
                         </textarea>
+                        <AIInput 
+                            inputName = "details"
+                            input={todoForm.details} 
+                            context={"improveTodo"} 
+                            onAccept={handleInputChange}
+                            htmlClass='absolute right-0'
+                        />
+                    </div>
+                    
                     <AISpeechInput 
-                        inputName = "details"
+                        inputName = "title"
                         captureSpeech={captureSpeech} 
                         enableListening={enableListening} 
                         setEnableListening={setEnableListening}
-                    />
-                    <AIInput 
-                        inputName = "details"
-                        input={todoForm.details} 
-                        context={"improveTodo"} 
-                        onAccept={handleInputChange}
                     />
                 </div>
             </div>

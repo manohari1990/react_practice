@@ -3,7 +3,7 @@ import TodoItem from "./TodoItem"
 
 function TodoList({ filteredTodos, handleDelete, handleEdit, handleStatus }) {
     return (
-        <div class="grid gap-1 p-4">
+        <div className="grid gap-1 p-4">
             {filteredTodos.length === 0 && <div>No Records Found!</div>}
             {filteredTodos.length > 0 && filteredTodos.map((todo) => {
                 return <TodoItem 
