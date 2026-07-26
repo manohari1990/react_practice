@@ -32,12 +32,29 @@ export const SortingLabels = [
     }
 ]
 
+export const TodoPriorityOption = [
+    {
+        'label': 'High',
+        'value': 'high'
+    },
+    {
+        'label': 'Medium',
+        'value': 'medium'
+    },
+    {
+        'label': 'Low',
+        'value': 'low'
+    },
+]
+
 export const RecordsPerPage = 10
 export const MODEL_NAME = "gemini-3.6-flash";
 export const INITIAL_TODO_FORM  = {
     id: "",
     title: "",
     details: "",
+    priority: "",
     status: 'active',
+    dueDate:'',
     createdAt: ''
 }

@@ -56,6 +56,8 @@ function TodoApp() {
             'id': Date.now(),
             'title': todoForm.title,
             'details': todoForm.details,
+            'priority': todoForm.priority,
+            'dueDate': todoForm.dueDate,
             'status': 'active',
             'createdAt': Date.now()
         }
@@ -109,7 +111,9 @@ function TodoApp() {
                 ? {
                     ...todo,
                     'title': todoForm.title,
-                    'details': todoForm.details
+                    'details': todoForm.details,
+                    'dueDate': todoForm.dueDate,
+                    'priority': todoForm.priority
                 } :
                 todo
         })

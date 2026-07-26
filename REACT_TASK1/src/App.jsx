@@ -5,7 +5,7 @@ import TodoApp from './components/todo/TodoApp'
 
 function App() {
   return (
-    <div className='d-flex flex-row gap-4 w-full min-h-screen items-start justify-center bg-slate-100'>
+    <div className='d-flex flex-row gap-4 w-full min-h-screen items-start justify-center bg-slate-100 p-5'>
       {/* <Counter /> */}
       {/* <TemperatureConverter /> */}
       <TodoApp />
