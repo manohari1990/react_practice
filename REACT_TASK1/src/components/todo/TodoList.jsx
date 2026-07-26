@@ -7,7 +7,7 @@ function TodoList({ filteredTodos, handleDelete, handleEdit, handleStatus }) {
             {filteredTodos.length === 0 && <div>No Records Found!</div>}
             {filteredTodos.length > 0 && filteredTodos.map((todo) => {
                 return <TodoItem 
-                    key={todo.id} 
+                    key={todo.todo_id} 
                     todo={todo} 
                     handleDelete={handleDelete} 
                     handleEdit={handleEdit} 

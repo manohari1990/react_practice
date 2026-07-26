@@ -7,17 +7,17 @@ import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
 import { sortedList, buildPagination } from '../../utils/helpers'
 import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
-
+import {getAllTodos} from '../../services/todoService'
 
 function TodoApp() {
 
-    const localTodos = localStorage.getItem('todoItems')
-    const savedTodos = localTodos != null ? JSON.parse(localTodos) : []  // !!! can be improved lazy initialization !!!
+    // const localTodos = localStorage.getItem('todoItems')
+    // const savedTodos = localTodos != null ? JSON.parse(localTodos) : []  // !!! can be improved lazy initialization !!!
     // const [input, setInput] = useState('')
 
     const [todoForm, setTodoForm] = useState(INITIAL_TODO_FORM);
 
-    const [todoItems, setTodoItems] = useState(savedTodos)
+    const [todoItems, setTodoItems] = useState([])
     const [isUpdate, setIsUpdate] = useState(false)
     const [selectedUpdateId, setSelectedUpdateId] = useState(null)
     const [filter, setFilter] = useState({priority: 'all', status:'all'})
@@ -25,11 +25,24 @@ function TodoApp() {
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
     const [pageNumber, setPageNumber] = useState(1)
 
-    let filteredTodos = todoItems.filter(todo=>{
+    useEffect(()=>{
+        const loadTodos = async() =>{
+            try{
+                const response = await getAllTodos()
+                setTodoItems(response)
+            }catch(e){
+                console.error(e)
+            }
+        }
+
+        loadTodos()
+    },[])
+
+    let filteredTodos = todoItems.length > 0 ? todoItems.filter(todo=>{
             const matchesStatus = filter.status === 'all' || todo.status === filter.status
             const matchesPriority = filter.priority === 'all' || todo.priority === filter.priority
             return matchesStatus && matchesPriority
-        })
+        }): []
     const lowerSearchText = search.trim().toLowerCase()
     filteredTodos = filteredTodos.filter((todo) => { return todo.title.toLowerCase().includes(lowerSearchText) || todo.details.toLowerCase().includes(lowerSearchText) })
     filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
@@ -40,10 +53,12 @@ function TodoApp() {
     const endIndex = startIndex + RecordsPerPage
     const paginatedTodo = filteredTodos.slice(startIndex, endIndex)
 
-    useEffect(() => {
-        const stringifyTodo = JSON.stringify(todoItems)
-        localStorage.setItem('todoItems', stringifyTodo)
-    }, [todoItems])
+    // useEffect(() => {
+    //     const stringifyTodo = JSON.stringify(todoItems)
+    //     localStorage.setItem('todoItems', stringifyTodo)
+    // }, [todoItems])
+
+    
 
     const displayPages = buildPagination(pageNumber, totalPages)
 
