@@ -1,9 +1,31 @@
 @import "tailwindcss";
 
-button{
+button {
     cursor: pointer;
 }
-button:disabled{
+
+button:disabled {
     cursor: default;
     opacity: 0.9;
+}
+
+.priority {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 6px;
+    vertical-align: middle;
+    border-radius: 8px;
+}
+
+.medium-priority {
+    background-color: #FFC107;
+}
+
+.low-priority {
+    background-color: #4CAF50;
+}
+
+.high-priority {
+    background-color: #FF5722;
 }

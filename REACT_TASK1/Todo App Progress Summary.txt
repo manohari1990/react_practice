@@ -1,40 +1,15 @@
-Todo App Progress Summary:
+functionaly requirements - 
+1. create and update todo items on user interations. Filter them as per user selection.
+2. saving the todo items into DB tables. 
+3. fetching the records from tables and show it in UI. create the services to communicate frontend and backend
+4. search by title or detail of the todos.
+5. write test cases for both UI/UX and API's
 
-✅ Features Implemented
-    Add Todo
-    Edit / Update Todo
-    Cancel Edit
-    Delete Todo
-    Update Todo Status (Active / Completed)
-    Filter Todos
-    Search Todos (case-insensitive)
-    Sort Todos (Newest, Oldest, A-Z, Z-A)
-    Pagination
-    Persist Todos using LocalStorage
+Non-functional requirements -
+1. create CICD to maintain the sync between environment and publish changes as soon as get uploaded.
 
-✅ React Concepts Learned
-    Controlled Components
-    Lifting State Up
-    Component-based Architecture (Single Responsibility)
-    Parent ↔ Child communication using Props & Callbacks
-    State Management with useState
-    Derived State (filter → search → sort → pagination)
-    Side Effects with useEffect
-    React Render & Mount lifecycle
-    Immutable State Updates (map, filter, find, slice)
-    Avoiding unnecessary state and flags
 
-✅ Current Component Structure
-    TodoApp
-    ├── TodoInput
-    ├── TodoFilters
-    ├── TodoList
-    │   └── TodoItem
-    └── TodoPagination
-
-🔄 Remaining Work
-    Pagination edge-case polish (Prev/Next, hide when one page, invalid page handling)
-    UI improvements
-    PostgreSQL database design
-    FastAPI CRUD APIs
-    Replace LocalStorage with API integration
+DB design -
+1. create following tables
+    - user_todos (id, title, details, due_date, priority, created_at, updated_at)
+    - filter_options(id, filter_type, label, value)

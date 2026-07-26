@@ -32,6 +32,25 @@ export const SortingLabels = [
     }
 ]
 
+export const TodoPriorityFilter = [
+    {
+        'label': 'All',
+        'value': 'all'
+    },
+    {
+        'label': 'High',
+        'value': 'high'
+    },
+    {
+        'label': 'Medium',
+        'value': 'medium'
+    },
+    {
+        'label': 'Low',
+        'value': 'low'
+    },
+]
+
 export const TodoPriorityOption = [
     {
         'label': 'High',

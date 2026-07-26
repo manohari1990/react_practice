@@ -19,6 +19,16 @@ function TodoItem({todo, handleDelete, handleEdit, handleStatus}){
                     {todo.details}
                 </div>
             </div>
+            <div className="flex items-center space-x-3">
+                <div className="font-medium text-gray-900">
+                    <span className={`priority ${todo.priority}-priority`}></span>{todo.priority}
+                </div>
+            </div>
+            <div className="flex items-center space-x-3">
+                <div className="font-medium text-gray-900">
+                    {todo.dueDate ? todo.dueDate : '-'}
+                </div>
+            </div>
 
             <div className="flex items-center space-x-2">
             <button className="p-1 text-gray-500 hover:text-blue-600" onClick={()=>handleEdit(todo.id)}>

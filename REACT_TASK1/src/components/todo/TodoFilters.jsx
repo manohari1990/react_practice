@@ -1,7 +1,8 @@
 // Todo Filter controls
-import { TodoFilterLabels, SortingLabels } from '../../utils/Constants'
+import { TodoFilterLabels, SortingLabels, TodoPriorityFilter } from '../../utils/Constants'
+import FilterOptions from './FilterOptions.jsx'
 
-function TodoFilters({ handleFilter, activeFilter, search, handleSearch, seletedSortOption, handleSort }) {
+function TodoFilters({ handleFilter, activeFilters, search, handleSearch, seletedSortOption, handleSort }) {
     return (
         <div className="mb-1 p-5">
             <div className='flex items-center justify-between'>
@@ -19,15 +20,12 @@ function TodoFilters({ handleFilter, activeFilter, search, handleSearch, seleted
                             })
                         }
                     </select>
-                    {
-                        TodoFilterLabels.length > 0 ?
-                            TodoFilterLabels.map(obj => {
-                                return <button key={obj.value} className={`rounded-lg px-4 py-2 text-gray-100 ${activeFilter === obj.value ? 'border-2 border-gray-900 text-gray-900' : 'bg-gray-900'}`} onClick={() => handleFilter(obj.value)}>{obj.label}</button>
-                            })
-                            : ''
-                    }
+                    <FilterOptions filterLabels={TodoFilterLabels} activeFilter={activeFilters.status} handleFilter={handleFilter} filterBy={'status'} />
                 </div>
-                <div>
+                <div className='flex gap-3'>
+                    <div className='flex gap-2'>
+                        <FilterOptions filterLabels={TodoPriorityFilter} activeFilter={activeFilters.priority} handleFilter={handleFilter} filterBy={'priority'} />
+                    </div>
                     <input className='rounded-lg border-gray-300 border text-heading text-sm px-3 py-2.5' type="text" placeholder="Enter search text" value={search} onChange={(e) => handleSearch(e.target.value)} />
                 </div>
             </div>

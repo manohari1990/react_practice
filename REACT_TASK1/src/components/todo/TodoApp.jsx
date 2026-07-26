@@ -20,18 +20,16 @@ function TodoApp() {
     const [todoItems, setTodoItems] = useState(savedTodos)
     const [isUpdate, setIsUpdate] = useState(false)
     const [selectedUpdateId, setSelectedUpdateId] = useState(null)
-    const [filter, setFilter] = useState('all')
+    const [filter, setFilter] = useState({priority: 'all', status:'all'})
     const [search, setSearch] = useState('')
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
     const [pageNumber, setPageNumber] = useState(1)
 
-
-    let filteredTodos = todoItems.length > 0 ?
-        (filter === 'all')
-            ? todoItems
-            : todoItems.filter(todo => {
-                if (todo.status === filter) return todo
-            }) : []
+    let filteredTodos = todoItems.filter(todo=>{
+            const matchesStatus = filter.status === 'all' || todo.status === filter.status
+            const matchesPriority = filter.priority === 'all' || todo.priority === filter.priority
+            return matchesStatus && matchesPriority
+        })
     const lowerSearchText = search.trim().toLowerCase()
     filteredTodos = filteredTodos.filter((todo) => { return todo.title.toLowerCase().includes(lowerSearchText) || todo.details.toLowerCase().includes(lowerSearchText) })
     filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
@@ -130,8 +128,13 @@ function TodoApp() {
         })
     }
 
-    const handleFilter = (selectedLabel) => {
-        setFilter(selectedLabel)
+    const handleFilter = (filterType, selectedLabel) => {
+        setFilter(prev=>{
+            return {
+                ...prev,
+                [filterType]:selectedLabel
+            }
+        })
         setPageNumber(1)
     }
 
@@ -151,7 +154,7 @@ function TodoApp() {
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 p-3 text-center">Todo App</h1>
-            <hr class="mb-10 mt-5 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+            <hr className="mb-10 mt-5 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
             <div className="max-w-lg mx-auto">
                 <TodoInput
                     todoForm={todoForm}
@@ -162,11 +165,11 @@ function TodoApp() {
                     isUpdate={isUpdate}
                 />
             </div>
-            <hr class="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
+            <hr className="my-12 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
             <div className="mx-auto">
                 <TodoFilters
                     handleFilter={handleFilter}
-                    activeFilter={filter}
+                    activeFilters={filter}
                     handleSearch={handleSearch}
                     seletedSortOption={seletedSortOption}
                     handleSort={handleSort}
