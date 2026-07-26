@@ -11,5 +11,6 @@ Non-functional requirements -
 
 DB design -
 1. create following tables
-    - user_todos (id, title, details, due_date, priority, created_at, updated_at)
+    - user_todos (id, user_id, title, details, due_date, priority, created_at, updated_at)
+    - users(id, username, phone, email, first_name, last_name, created_at, updated_at)
     - filter_options(id, filter_type, label, value)
