@@ -1,13 +1,13 @@
 import express from 'express'
-import todoRouter from '../routes/todo.routes.js'
+import todoRouter from './routes/todo.routes.js'
 
 const app = express()
 
 app.use(express.json())
 
 app.get('/', (req, res)=>{
-    console.log(req)
-
+    console.log("Todo App")
+    res.status(200).json("Todo App is running here")
 })
 
 app.use('/todos', todoRouter)
