@@ -8,8 +8,8 @@ export const TodoFilterLabels = [
         'value': 'completed'
     },
     {
-        'label': 'Active',
-        'value': 'active'
+        'label': 'Backlog',
+        'value': 'pending'
     }
 ]
 
@@ -73,7 +73,6 @@ export const INITIAL_TODO_FORM  = {
     title: "",
     details: "",
     priority: "",
-    status: 'active',
-    dueDate:'',
-    createdAt: ''
+    status: 'pending',
+    due_date:'',
 }

@@ -95,7 +95,7 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
             <div className='flex item-start gap-2'>
                 <div className='mb-5'>
                     <label
-                        htmlFor="todo-dueDate"
+                        htmlFor="todo-due_date"
                         className="block mb-2.5 text-sm font-medium text-heading">
                         Due Date
                     </label>
@@ -103,11 +103,11 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
                     <div className="flex items-start gap-2">
                         <div className='w-full relative'>
                             <input
-                                id="todo-dueDate"
-                                name="dueDate"
+                                id="todo-due_date"
+                                name="due_date"
                                 type='date'
-                                value={todoForm.dueDate}
-                                placeholder="Todo dueDate"
+                                value={todoForm.due_date}
+                                placeholder="Todo Due Date"
                                 onChange={(e) => handleInputChange(e.target.name, e.target.value)}
                                 className="flex-1 w-full rounded-lg border border-gray-300 text-heading text-sm px-3 py-2.5"
                                 required

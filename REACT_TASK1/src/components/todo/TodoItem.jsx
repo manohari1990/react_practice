@@ -26,7 +26,7 @@ function TodoItem({todo, handleDelete, handleEdit, handleStatus}){
             </div>
             <div className="flex items-center space-x-3">
                 <div className="font-medium text-gray-900">
-                    {todo.dueDate ? todo.dueDate : '-'}
+                    {todo.due_date ? todo.due_date : '-'}
                 </div>
             </div>
 

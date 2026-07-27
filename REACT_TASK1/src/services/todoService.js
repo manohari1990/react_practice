@@ -1,5 +1,6 @@
 
 const HOST_URL = 'http://localhost:5000'
+const HEADERS = { 'Content-Type': 'application/json' } // Alerts server you are sending JSON
 
 export const getAllTodos = async(params) =>{
     try{
@@ -14,4 +15,18 @@ export const getAllTodos = async(params) =>{
         console.log(error)
         throw error
     }
-} 
+}
+
+export const saveTodo = async(formData) => {
+    console.log(JSON.stringify(formData), 'formData')
+    try{
+        const response = await fetch(`${HOST_URL}/todos`, {method: 'POST',  body: JSON.stringify(formData)})
+        if(!response.ok){
+            throw new Error("Failed to saved!")
+        }
+        return await response.json()
+    }catch(error){
+        console.error(error)
+        throw error
+    }
+}

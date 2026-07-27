@@ -7,16 +7,12 @@ import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
 import { sortedList, buildPagination } from '../../utils/helpers'
 import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
-import {getAllTodos} from '../../services/todoService'
+import {getAllTodos, saveTodo} from '../../services/todoService'
 
 function TodoApp() {
 
-    // const localTodos = localStorage.getItem('todoItems')
-    // const savedTodos = localTodos != null ? JSON.parse(localTodos) : []  // !!! can be improved lazy initialization !!!
-    // const [input, setInput] = useState('')
-
     const [todoForm, setTodoForm] = useState(INITIAL_TODO_FORM);
-
+    const [loading, setLoading] = useState(false)
     const [todoItems, setTodoItems] = useState([])
     const [isUpdate, setIsUpdate] = useState(false)
     const [selectedUpdateId, setSelectedUpdateId] = useState(null)
@@ -53,31 +49,31 @@ function TodoApp() {
     const endIndex = startIndex + RecordsPerPage
     const paginatedTodo = filteredTodos.slice(startIndex, endIndex)
 
-    // useEffect(() => {
-    //     const stringifyTodo = JSON.stringify(todoItems)
-    //     localStorage.setItem('todoItems', stringifyTodo)
-    // }, [todoItems])
-
-    
-
     const displayPages = buildPagination(pageNumber, totalPages)
 
-    const handleAddTodo = () => {
-
+    const handleAddTodo = async() => {
+        setLoading(true)
         if (todoForm.title.trim() === '') return;
         let newTodo = {
-            'id': Date.now(),
             'title': todoForm.title,
             'details': todoForm.details,
             'priority': todoForm.priority,
-            'dueDate': todoForm.dueDate,
-            'status': 'active',
-            'createdAt': Date.now()
+            'due_date': todoForm.due_date,
+            'status': 'pending',
         }
-        setTodoItems((prev) => {
-            return [newTodo, ...prev]
-        })
-        setTodoForm(INITIAL_TODO_FORM)
+        try{
+            const serverResponse = await saveTodo(newTodo)
+            console.log(serverResponse)
+            setTodoItems((prev) => {
+                return [newTodo, ...prev]
+            })
+            setTodoForm(INITIAL_TODO_FORM)
+        }catch(e){
+            console.error(e)
+        }finally{
+            setLoading(false)
+        }
+        
     }
 
     const handleDelete = (id) => {
@@ -110,7 +106,7 @@ function TodoApp() {
             return id === todo.id
                 ? {
                     ...todo,
-                    'status': status ? 'completed' : 'active'
+                    'status': status ? 'completed' : 'pending'
                 } :
                 todo
         })
@@ -125,7 +121,7 @@ function TodoApp() {
                     ...todo,
                     'title': todoForm.title,
                     'details': todoForm.details,
-                    'dueDate': todoForm.dueDate,
+                    'due_date': todoForm.due_date,
                     'priority': todoForm.priority
                 } :
                 todo
