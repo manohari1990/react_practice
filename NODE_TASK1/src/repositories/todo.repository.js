@@ -47,3 +47,23 @@ export const todoById = async(id) =>{
         throw err;
     }
 }
+
+export const saveTodoRepo = async(todoBody) => {
+    const columns = []
+    const values = []
+    const placeholders = []
+    let count = 1
+    for(const key in todoBody){
+        columns.push(key)
+        values.push(todoBody[key])
+        placeholders.push(`$${count++}`)
+    }
+    const sql = `INSERT INTO user_todos( ${columns.join(', ')} ) VALUES( ${placeholders.join(', ')} ) RETURNING *`
+    try{
+        const response = await query(sql, values)
+        return response.rows
+    }catch(err){
+        console.error(err)
+        throw err
+    }
+}

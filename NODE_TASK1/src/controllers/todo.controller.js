@@ -1,4 +1,4 @@
-import { allTodosService, todoByIdService } from "../services/todo.service.js";
+import { allTodosService, todoByIdService, saveTodoService } from "../services/todo.service.js";
 
 export const getAllTodos = async(req, res) =>{
     const filters = req.query;
@@ -10,9 +10,17 @@ export const getAllTodos = async(req, res) =>{
     }
 }
 
-export const newTodo = async(req, res) =>{
-    const rowValues = req.params
-    console.log(rowValues)
+export const saveTodo = async(req, res) =>{
+    const todoBody = req.body
+    try{
+        const response = await saveTodoService(todoBody)
+        res.status(201).json(response)
+    }catch(error){
+        console.error(error)
+        res.status(500).json({
+            message: 'Internal Server Error'
+        })
+    }
 }
 
 export const getTodoById = async(req, res)=>{
