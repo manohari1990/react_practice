@@ -20,7 +20,7 @@ export const getAllTodos = async(params) =>{
 export const saveTodo = async(formData) => {
     console.log(JSON.stringify(formData), 'formData')
     try{
-        const response = await fetch(`${HOST_URL}/todos`, {method: 'POST',  body: JSON.stringify(formData)})
+        const response = await fetch(`${HOST_URL}/todos`, {method: 'POST', headers:HEADERS, body: JSON.stringify(formData)})
         if(!response.ok){
             throw new Error("Failed to saved!")
         }
