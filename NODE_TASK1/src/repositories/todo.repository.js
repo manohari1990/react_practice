@@ -28,7 +28,7 @@ export const allTodos = async(filters) =>{
     sql += ` ORDER BY ${sortBy} ${order} `
 
     console.log(sql)
-    console.log(values)
+    console.log(values)  // till here, it should be in service
 
     try{
         const result = await query(sql,values)
@@ -58,7 +58,7 @@ export const saveTodoRepo = async(todoBody) => {
         values.push(todoBody[key])
         placeholders.push(`$${count++}`)
     }
-    const sql = `INSERT INTO user_todos( ${columns.join(', ')} ) VALUES( ${placeholders.join(', ')} ) RETURNING *`
+    const sql = `INSERT INTO user_todos( ${columns.join(', ')} ) VALUES( ${placeholders.join(', ')} ) RETURNING *` // till here, it should be in service
     try{
         const response = await query(sql, values)
         return response.rows
