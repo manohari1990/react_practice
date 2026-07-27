@@ -1,12 +1,18 @@
 import { allTodosService, todoByIdService } from "../services/todo.service.js";
 
 export const getAllTodos = async(req, res) =>{
+    const filters = req.query;
     try{
-        const allTodos = await allTodosService();
+        const allTodos = await allTodosService(filters);
         res.status(200).json(allTodos)
     }catch(error){
         console.error(error)
     }
+}
+
+export const newTodo = async(req, res) =>{
+    const rowValues = req.params
+    console.log(rowValues)
 }
 
 export const getTodoById = async(req, res)=>{

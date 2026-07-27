@@ -5,7 +5,7 @@ import todoRouter from './routes/todo.routes.js'
 const app = express()
 
 app.use(cors({
-    origin:'http://localhost:3000'
+    origin:'http://localhost:8000'
 }))
 app.use(express.json())
 
