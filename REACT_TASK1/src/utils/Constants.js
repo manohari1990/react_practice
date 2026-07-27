@@ -69,7 +69,7 @@ export const TodoPriorityOption = [
 export const RecordsPerPage = 10
 export const MODEL_NAME = "gemini-3.6-flash";
 export const INITIAL_TODO_FORM  = {
-    id: "",
+    todo_id: "",
     title: "",
     details: "",
     priority: "",

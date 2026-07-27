@@ -4,7 +4,7 @@ const HEADERS = { 'Content-Type': 'application/json' } // Alerts server you are 
 
 export const getAllTodos = async(params) =>{
     try{
-        const todos = await fetch(`${HOST_URL}/todos`)
+        const todos = await fetch(`${HOST_URL}/todos?${params}`)
         console.log(todos.ok, 'todo.ok')
         console.log(todos.status, 'todo.status')
         if(!todos.ok){

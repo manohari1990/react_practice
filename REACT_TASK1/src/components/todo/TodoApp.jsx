@@ -5,7 +5,7 @@ import TodoInput from "./TodoInput"
 import TodoList from "./TodoList"
 import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
-import { sortedList, buildPagination } from '../../utils/helpers'
+import { sortedList, buildPagination, buildQueryParams } from '../../utils/helpers'
 import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
 import {getAllTodos, saveTodo} from '../../services/todoService'
 
@@ -20,19 +20,19 @@ function TodoApp() {
     const [search, setSearch] = useState('')
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
     const [pageNumber, setPageNumber] = useState(1)
+    
+    const loadTodos = async(params) =>{
+        try{
+            const response = await getAllTodos(params)
+            setTodoItems(response)
+        }catch(e){
+            console.error(e)
+        }
+    }
 
     useEffect(()=>{
-        const loadTodos = async() =>{
-            try{
-                const response = await getAllTodos()
-                setTodoItems(response)
-            }catch(e){
-                console.error(e)
-            }
-        }
-
-        loadTodos()
-    },[])
+        loadTodos(buildQueryParams(search, seletedSortOption, filter))
+    },[search, seletedSortOption, filter])
 
     let filteredTodos = todoItems.length > 0 ? todoItems.filter(todo=>{
             const matchesStatus = filter.status === 'all' || todo.status === filter.status
@@ -57,7 +57,7 @@ function TodoApp() {
         let newTodo = {
             'title': todoForm.title,
             'details': todoForm.details,
-            'priority': todoForm.priority,
+            'priority': todoForm.priority ? todoForm.priority : 'medium',
             'due_date': todoForm.due_date,
             'status': 'pending',
         }
@@ -86,9 +86,9 @@ function TodoApp() {
     }
 
     const handleEdit = (id) => {
-        const todo = todoItems.find(todo => todo.id === id)
+        const todo = todoItems.find(todo => todo.todo_id === id)
         if (!todo) return;
-        setSelectedUpdateId(todo.id)
+        setSelectedUpdateId(todo.todo_id)
         setIsUpdate(true)
         setTodoForm({
             ...todo
@@ -103,7 +103,7 @@ function TodoApp() {
 
     const handleStatus = (status, id) => {
         const updatedList = todoItems.map(todo => {
-            return id === todo.id
+            return id === todo.todo_id
                 ? {
                     ...todo,
                     'status': status ? 'completed' : 'pending'
@@ -116,7 +116,7 @@ function TodoApp() {
     const handleUpdateItem = () => {
         if (todoForm.title.trim() === '') return;
         const updatedList = todoItems.map(todo => {
-            return selectedUpdateId === todo.id
+            return selectedUpdateId === todo.todo_id
                 ? {
                     ...todo,
                     'title': todoForm.title,

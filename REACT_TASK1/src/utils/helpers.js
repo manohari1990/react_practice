@@ -46,3 +46,23 @@ export function buildPagination(currentPage, totalPages) {
     return displayPages
 }
 
+export const buildQueryParams = (search, seletedSortOption, filter) => {
+    const queryParam = {
+        'sortBy':
+            seletedSortOption === "newest" ||
+            seletedSortOption === "oldest"
+                ? "created_at"
+                : "title",
+        'order':
+            seletedSortOption === "oldest" ||
+            seletedSortOption === "a-z"
+                ? "ASC"
+                : "DESC"
+    }
+
+    if(filter.priority !== 'all') queryParam.priority = filter.priority
+    if(filter.status !== 'all') queryParam.status = filter.status
+    if(search.trim()) queryParam.search = search.trim()
+
+    return new URLSearchParams(queryParam).toString()
+}
