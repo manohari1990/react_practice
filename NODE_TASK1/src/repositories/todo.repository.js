@@ -5,7 +5,7 @@ import { buildUpdateQuery, buildInsertQuery } from '../utils/helpers.js'
 export const allTodos = async(filters) =>{
     const conditions = []
     const values = []
-    let sql = 'SELECT * FROM user_todos'
+    let sql = 'SELECT *, due_date::text AS due_date FROM user_todos'
     
     if(filters.search){
         conditions.push(` ( title ILIKE $${values.length + 1} OR details ILIKE $${values.length + 1} ) `)
@@ -27,9 +27,6 @@ export const allTodos = async(filters) =>{
     const sortBy = allowedSortFields.includes(filters.sortBy) ? filters.sortBy : DEFAULT_SORT_BY
     const order = filters.order?.toUpperCase() === 'ASC' ? 'ASC' : DEFAULT_ORDER
     sql += ` ORDER BY ${sortBy} ${order} `
-
-    console.log(sql)
-    console.log(values)  // till here, it should be in service
 
     try{
         const result = await query(sql,values)
