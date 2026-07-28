@@ -7,7 +7,7 @@ import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
 import { sortedList, buildPagination, buildQueryParams } from '../../utils/helpers'
 import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
-import {getAllTodos, saveTodo} from '../../services/todoService'
+import {getAllTodos, saveTodo, updateTodo} from '../../services/todoService'
 
 function TodoApp() {
 
@@ -113,20 +113,35 @@ function TodoApp() {
         setTodoItems(updatedList)
     }
 
-    const handleUpdateItem = () => {
+    const handleUpdateItem = async() => {
         if (todoForm.title.trim() === '') return;
         const updatedList = todoItems.map(todo => {
-            return selectedUpdateId === todo.todo_id
-                ? {
-                    ...todo,
-                    'title': todoForm.title,
-                    'details': todoForm.details,
-                    'due_date': todoForm.due_date,
-                    'priority': todoForm.priority
-                } :
-                todo
+            return  todoForm.todo_id === todo.todo_id 
+                    ? {
+                        ...todo,
+                        'title': todoForm.title,
+                        'details': todoForm.details,
+                        'due_date': todoForm.due_date,
+                        'priority': todoForm.priority
+                    } :  todo
         })
+        console.log(updatedList)
         setTodoItems(updatedList)
+        setLoading(true)
+        try{
+            const res = await updateTodo(selectedUpdateId, {
+                'title': todoForm.title,
+                'details': todoForm.details,
+                'due_date': todoForm.due_date,
+                'priority': todoForm.priority,
+                'status': todoForm.status
+            })
+            console.log(res)
+        }catch(err){
+            console.error(err)
+        }finally{
+            setLoading(false)
+        }
         handleCancelUpdate()
     }
 

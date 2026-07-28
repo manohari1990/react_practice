@@ -30,3 +30,17 @@ export const saveTodo = async(formData) => {
         throw error
     }
 }
+
+export const updateTodo = async(id, formData) =>{
+    console.log(id, formData)
+    try{
+        const response = await fetch(`${HOST_URL}/todos/${id}`,{ method: 'PUT', headers:HEADERS, body:JSON.stringify(formData) })
+        if(!response.ok){
+            throw new Error("Failed to update!") 
+        }
+        return await response.json()
+    }catch(err){
+        console.error(err)
+        throw err
+    }
+}
