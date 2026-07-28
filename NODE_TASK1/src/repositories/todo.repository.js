@@ -66,7 +66,6 @@ export const updateTodoRepo = async(id, todoBody) =>{
     const {sql,newValues} = buildUpdateQuery(id, todoBody)
     try{
         const response = await query(sql, newValues)
-        console.log(response.rows)
         return response.rows
     }catch(err){
         console.log(err)
@@ -74,11 +73,18 @@ export const updateTodoRepo = async(id, todoBody) =>{
     }
 }
 
+export const deleteTodoByIdRepo = async(id) =>{
+    const sql = ` DELETE FROM user_todos WHERE todo_id = $1 RETURNING * `
+    try{
+        const response = await query(sql, [id])
+        return response.rows
+    }catch(err){
+        console.error(err)
+        throw err
+    }
+}
 
 
 
-
-
-// DELETE /todos/:id – Remove a todo and update the UI.
 // Server-side pagination – Add page and limit support using LIMIT and OFFSET.
 // Basic validation – Return 400 Bad Request for invalid input (e.g., empty title or invalid priority).
