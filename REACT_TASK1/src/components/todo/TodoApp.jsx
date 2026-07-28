@@ -7,7 +7,7 @@ import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
 import { sortedList, buildPagination, buildQueryParams } from '../../utils/helpers'
 import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
-import {getAllTodos, saveTodo, updateTodo, deleteTodoByID } from '../../services/todoService'
+import { getAllTodos, saveTodo, updateTodo, deleteTodoByID } from '../../services/todoService'
 
 function TodoApp() {
 
@@ -16,33 +16,33 @@ function TodoApp() {
     const [todoItems, setTodoItems] = useState([])
     const [isUpdate, setIsUpdate] = useState(false)
     const [selectedUpdateId, setSelectedUpdateId] = useState(null)
-    const [filter, setFilter] = useState({priority: 'all', status:'all'})
+    const [filter, setFilter] = useState({ priority: 'all', status: 'all' })
     const [search, setSearch] = useState('')
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
     const [pageNumber, setPageNumber] = useState(1)
     const [httpError, setHttpError] = useState('')
-    
-    const loadTodos = async(params) =>{
+
+    const loadTodos = async (params) => {
         setLoading(true)
-        try{
+        try {
             const response = await getAllTodos(params)
             setTodoItems(response)
-        }catch(e){
+        } catch (e) {
             console.error(e)
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         loadTodos(buildQueryParams(search, seletedSortOption, filter))
-    },[search, seletedSortOption, filter])
+    }, [search, seletedSortOption, filter])
 
-    let filteredTodos = todoItems.length > 0 ? todoItems.filter(todo=>{
-            const matchesStatus = filter.status === 'all' || todo.status === filter.status
-            const matchesPriority = filter.priority === 'all' || todo.priority === filter.priority
-            return matchesStatus && matchesPriority
-        }): []
+    let filteredTodos = todoItems.length > 0 ? todoItems.filter(todo => {
+        const matchesStatus = filter.status === 'all' || todo.status === filter.status
+        const matchesPriority = filter.priority === 'all' || todo.priority === filter.priority
+        return matchesStatus && matchesPriority
+    }) : []
     const lowerSearchText = search.trim().toLowerCase()
     filteredTodos = filteredTodos.filter((todo) => { return todo.title.toLowerCase().includes(lowerSearchText) || todo.details.toLowerCase().includes(lowerSearchText) })
     filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
@@ -55,7 +55,7 @@ function TodoApp() {
 
     const displayPages = buildPagination(pageNumber, totalPages)
 
-    const handleAddTodo = async() => {
+    const handleAddTodo = async () => {
         setLoading(true)
         if (todoForm.title.trim() === '') return;
         let newTodo = {
@@ -65,26 +65,26 @@ function TodoApp() {
             'due_date': todoForm.due_date,
             'status': 'pending',
         }
-        try{
+        try {
             const serverResponse = await saveTodo(newTodo)
             console.log(serverResponse)
             setTodoItems((prev) => {
                 return [newTodo, ...prev]
             })
             setTodoForm(INITIAL_TODO_FORM)
-        }catch(e){
+        } catch (e) {
             console.error(e)
-        }finally{
+        } finally {
             setLoading(false)
         }
-        
+
     }
 
-    const handleDelete = async(id) => {
+    const handleDelete = async (id) => {
         setLoading(true)
-        try{
+        try {
             const resposne = await deleteTodoByID(id)
-            if(resposne.length > 0){
+            if (resposne.length > 0) {
                 const filteredList = todoItems.filter(item => {
                     console.log(item.todo_id, id)
                     return item.todo_id !== id
@@ -94,13 +94,13 @@ function TodoApp() {
                 if (pageNumber > newPageTotal) {
                     setPageNumber(pageNumber - 1)
                 }
-            }else{
+            } else {
                 setHttpError("Try Again!")
             }
-            
-        }catch(err){
+
+        } catch (err) {
             console.error(err)
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
@@ -133,22 +133,22 @@ function TodoApp() {
         setTodoItems(updatedList)
     }
 
-    const handleUpdateItem = async() => {
+    const handleUpdateItem = async () => {
         if (todoForm.title.trim() === '') return;
         const updatedList = todoItems.map(todo => {
-            return  todoForm.todo_id === todo.todo_id 
-                    ? {
-                        ...todo,
-                        'title': todoForm.title,
-                        'details': todoForm.details,
-                        'due_date': todoForm.due_date,
-                        'priority': todoForm.priority
-                    } :  todo
+            return todoForm.todo_id === todo.todo_id
+                ? {
+                    ...todo,
+                    'title': todoForm.title,
+                    'details': todoForm.details,
+                    'due_date': todoForm.due_date,
+                    'priority': todoForm.priority
+                } : todo
         })
         console.log(updatedList)
         setTodoItems(updatedList)
         setLoading(true)
-        try{
+        try {
             const res = await updateTodo(selectedUpdateId, {
                 'title': todoForm.title,
                 'details': todoForm.details,
@@ -157,9 +157,9 @@ function TodoApp() {
                 'status': todoForm.status
             })
             console.log(res)
-        }catch(err){
+        } catch (err) {
             console.error(err)
-        }finally{
+        } finally {
             setLoading(false)
         }
         handleCancelUpdate()
@@ -175,10 +175,10 @@ function TodoApp() {
     }
 
     const handleFilter = (filterType, selectedLabel) => {
-        setFilter(prev=>{
+        setFilter(prev => {
             return {
                 ...prev,
-                [filterType]:selectedLabel
+                [filterType]: selectedLabel
             }
         })
         setPageNumber(1)
@@ -221,7 +221,7 @@ function TodoApp() {
                     handleSort={handleSort}
                 />
                 <TodoList
-                    filteredTodos={paginatedTodo}
+                    filteredTodos={[]}
                     handleDelete={handleDelete}
                     handleEdit={handleEdit}
                     handleStatus={handleStatus}

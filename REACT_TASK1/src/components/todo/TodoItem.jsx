@@ -1,44 +1,47 @@
 // Responsible only for displaying each item
 
-function TodoItem({todo, handleDelete, handleEdit, handleStatus}){
+function TodoItem({ todo, handleDelete, handleEdit, handleStatus }) {
     return (
-        <div id={todo.todo_id} key={todo.todo_id}  className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <div className="flex items-center space-x-2">
-                <div className="font-medium text-gray-900">
-                    <input type="checkbox" className="h-4 w-4 text-indigo-600 rounded" checked={todo.status == 'completed'} onChange={(e)=>handleStatus(e.target.checked, todo.todo_id)} />
-                </div>
-            </div>
 
-            <div className="flex items-center space-x-3">
-                <div className="font-medium text-gray-900">
-                    {todo.title}
-                </div>
-            </div>
-            <div className="flex items-center space-x-3">
-                <div className="font-medium text-gray-900">
-                    {todo.details}
-                </div>
-            </div>
-            <div className="flex items-center space-x-3">
-                <div className="font-medium text-gray-900">
-                    <span className={`priority ${todo.priority}-priority`}></span>{todo.priority}
-                </div>
-            </div>
-            <div className="flex items-center space-x-3">
-                <div className="font-medium text-gray-900">
-                    {todo.due_date ? todo.due_date : '-'}
-                </div>
-            </div>
+        <tr id={todo.todo_id} key={todo.todo_id} className="has-[:checked]:bg-blue-50/50 dark:has-[:checked]:bg-blue-900/10">
+            <td className="w-8 pl-3 py-4">
+                <label className="group has-[input:checked]:text-slate-900 inline-block">
+                    <input type="checkbox" className="sr-only row-checkbox" onChange={(e) => handleStatus(e.target.checked, todo.todo_id)} />
+                    <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded outline-1 outline-slate-300 dark:outline-neutral-700
+                                 bg-white dark:bg-neutral-800
+                                 group-has-[input:checked]:bg-blue-600
+                                 group-has-[input:checked]:outline-blue-600
+                                 group-focus-within:outline-2
+                                 group-focus-within:outline-blue-600" aria-hidden="true">
 
-            <div className="flex items-center space-x-2">
-            <button className="p-1 text-gray-500 hover:text-blue-600" onClick={()=>handleEdit(todo.todo_id)}>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-            </button>
-            <button className="p-1 text-gray-500 hover:text-red-600" onClick={()=>handleDelete(todo.todo_id)}>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            </button>
-            </div>
-        </div>
+                        <svg className="size-3 text-white opacity-0 group-has-[input:checked]:opacity-100" viewBox="0 0 12 10"
+                            fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M1 5l3 3 7-7" />
+                        </svg>
+                    </span>
+                </label>
+            </td>
+            <td className="px-3 py-4 font-medium text-slate-900 dark:text-slate-50 whitespace-nowrap">{todo.title}</td>
+            <td className="px-3 py-4 text-slate-500 dark:text-slate-400"> {todo.details}</td>
+            <td className="px-3 py-4 text-slate-500 dark:text-slate-400">{todo.priority}</td>
+            <td className="px-3 py-4 text-slate-500 dark:text-slate-400">{todo.due_date}</td>
+            <td className="px-3 py-4 flex gap-3">
+                <button
+                    type="button"
+                    onClick={() => handleEdit(todo.todo_id)}
+                    className="text-sm text-blue-700 dark:text-blue-500 cursor-pointer hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+                    aria-label={`Edit ${todo.title}`}>
+                    Edit
+                </button>
+                <button
+                    type="button"
+                    onClick={() => handleDelete(todo.todo_id)}
+                    className="text-sm text-red-700 dark:text-red-500 cursor-pointer hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
+                    aria-label={`Delete ${todo.title}`}>
+                    Delete
+                </button>
+            </td>
+        </tr>
     )
 }
 
