@@ -1,4 +1,4 @@
-import { allTodos, todoById, saveTodoRepo } from "../repositories/todo.repository.js"
+import { allTodos, todoById, saveTodoRepo, updateTodoRepo } from "../repositories/todo.repository.js"
 
 export const allTodosService = async(filters) => {
     return await allTodos(filters)
@@ -10,4 +10,8 @@ export const todoByIdService = async(id) =>{
 
 export const saveTodoService = async(todoBody) =>{
     return await saveTodoRepo(todoBody)
+}
+
+export const updateTodoService = async(id,todoBody)=>{
+    return await updateTodoRepo(id,todoBody)
 }

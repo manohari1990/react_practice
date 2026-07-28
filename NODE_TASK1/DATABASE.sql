@@ -10,3 +10,19 @@ create table if not exists user_todos (
 	created_at timestamptz default current_timestamp,
 	updated_at timestamptz default current_timestamp
 )
+
+
+-- AS updated_at COLUMN IS NOT REFRESHED WHILE EXISTING ROW IS CHANGED, WRITTEN A TRIGGER METHOD TO HANDLE IT.
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN 
+	NEW.updated_at = CURRENT_TIMESTAMP;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ATTACH THE TRIGGER TO THE TABLE SO THAT IT WILL RUN BEFORE EVERY CHANGED RECORD
+CREATE TRIGGER update_timestamp
+BEFORE UPDATE ON user_todos
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();

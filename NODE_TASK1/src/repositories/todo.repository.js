@@ -1,5 +1,6 @@
 import { query } from '../config/database.js'
 import { DEFAULT_PAGE_LIMIT, DEFAULT_SORT_BY, DEFAULT_ORDER, allowedSortFields } from '../Constant.js'
+import { buildUpdateQuery, buildInsertQuery } from '../utils/helpers.js'
 
 export const allTodos = async(filters) =>{
     const conditions = []
@@ -49,16 +50,9 @@ export const todoById = async(id) =>{
 }
 
 export const saveTodoRepo = async(todoBody) => {
-    const columns = []
-    const values = []
-    const placeholders = []
-    let count = 1
-    for(const key in todoBody){
-        columns.push(key)
-        values.push(todoBody[key])
-        placeholders.push(`$${count++}`)
-    }
-    const sql = `INSERT INTO user_todos( ${columns.join(', ')} ) VALUES( ${placeholders.join(', ')} ) RETURNING *` // till here, it should be in service
+    
+    const {sql,values} = buildInsertQuery(todoBody)
+    console.log(sql,values)
     try{
         const response = await query(sql, values)
         return response.rows
@@ -67,3 +61,24 @@ export const saveTodoRepo = async(todoBody) => {
         throw err
     }
 }
+
+export const updateTodoRepo = async(id, todoBody) =>{
+    const {sql,newValues} = buildUpdateQuery(id, todoBody)
+    try{
+        const response = await query(sql, newValues)
+        console.log(response.rows)
+        return response.rows
+    }catch(err){
+        console.log(err)
+        throw err
+    }
+}
+
+
+
+
+
+
+// DELETE /todos/:id – Remove a todo and update the UI.
+// Server-side pagination – Add page and limit support using LIMIT and OFFSET.
+// Basic validation – Return 400 Bad Request for invalid input (e.g., empty title or invalid priority).
