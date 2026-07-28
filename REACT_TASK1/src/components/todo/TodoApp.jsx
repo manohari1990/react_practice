@@ -7,7 +7,7 @@ import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
 import { sortedList, buildPagination, buildQueryParams } from '../../utils/helpers'
 import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
-import {getAllTodos, saveTodo, updateTodo} from '../../services/todoService'
+import {getAllTodos, saveTodo, updateTodo, deleteTodoByID } from '../../services/todoService'
 
 function TodoApp() {
 
@@ -20,13 +20,17 @@ function TodoApp() {
     const [search, setSearch] = useState('')
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
     const [pageNumber, setPageNumber] = useState(1)
+    const [httpError, setHttpError] = useState('')
     
     const loadTodos = async(params) =>{
+        setLoading(true)
         try{
             const response = await getAllTodos(params)
             setTodoItems(response)
         }catch(e){
             console.error(e)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -76,12 +80,28 @@ function TodoApp() {
         
     }
 
-    const handleDelete = (id) => {
-        const filteredList = todoItems.filter(item => item.id !== id)
-        setTodoItems(filteredList)
-        const newPageTotal = Math.ceil(filteredList.length / RecordsPerPage)
-        if (pageNumber > newPageTotal) {
-            setPageNumber(pageNumber - 1)
+    const handleDelete = async(id) => {
+        setLoading(true)
+        try{
+            const resposne = await deleteTodoByID(id)
+            if(resposne.length > 0){
+                const filteredList = todoItems.filter(item => {
+                    console.log(item.todo_id, id)
+                    return item.todo_id !== id
+                })
+                setTodoItems(filteredList)
+                const newPageTotal = Math.ceil(filteredList.length / RecordsPerPage)
+                if (pageNumber > newPageTotal) {
+                    setPageNumber(pageNumber - 1)
+                }
+            }else{
+                setHttpError("Try Again!")
+            }
+            
+        }catch(err){
+            console.error(err)
+        }finally{
+            setLoading(false)
         }
     }
 

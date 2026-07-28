@@ -44,3 +44,17 @@ export const updateTodo = async(id, formData) =>{
         throw err
     }
 }
+
+export const deleteTodoByID = async(id) =>{
+    console.log(id)
+    try{
+        const response = await fetch(`${HOST_URL}/todos/${id}`, {method:'DELETE', headers: HEADERS})
+        if(!response.ok){
+            throw new Error("Failed to delete the record, Try again!")
+        }
+        return await response.json()
+    }catch(err){
+        console.error(err)
+        throw err
+    }
+}
