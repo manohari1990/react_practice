@@ -6,7 +6,7 @@ import TodoList from "./TodoList"
 import TodoFilters from './TodoFilters'
 import TodoPagination from './TodoPagination'
 import { sortedList, buildPagination, buildQueryParams } from '../../utils/helpers'
-import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
+import { RECORDS_PER_PAGE, INITIAL_TODO_FORM } from '../../utils/Constants'
 import { getAllTodos, saveTodo, updateTodo, deleteTodoByID } from '../../services/todoService'
 import ConfirmDelete from "./ConfirmDelete"
 
@@ -23,12 +23,16 @@ function TodoApp() {
     const [pageNumber, setPageNumber] = useState(1)
     const [httpError, setHttpError] = useState('')
     const [confirmDel, setConfirmDel] = useState(null)
-
+    const [fetchedApiDetails, setFetchedApiDetails] = useState(null)
+    
     const loadTodos = async (params) => {
         setLoading(true)
         try {
             const response = await getAllTodos(params)
-            setTodoItems(response)
+            if(response.success) {
+                setFetchedApiDetails(response)
+                setTodoItems(response.records)
+            }
         } catch (e) {
             console.error(e)
         } finally {
@@ -37,24 +41,13 @@ function TodoApp() {
     }
 
     useEffect(() => {
-        loadTodos(buildQueryParams(search, seletedSortOption, filter))
-    }, [search, seletedSortOption, filter])
+        loadTodos(buildQueryParams(search, seletedSortOption, filter, pageNumber))
+    }, [search, seletedSortOption, filter, pageNumber])
 
-    let filteredTodos = todoItems.length > 0 ? todoItems.filter(todo => {
-        const matchesStatus = filter.status === 'all' || todo.status === filter.status
-        const matchesPriority = filter.priority === 'all' || todo.priority === filter.priority
-        return matchesStatus && matchesPriority
-    }) : []
-    const lowerSearchText = search.trim().toLowerCase()
-    filteredTodos = filteredTodos.filter((todo) => { return todo.title.toLowerCase().includes(lowerSearchText) || todo.details.toLowerCase().includes(lowerSearchText) })
-    filteredTodos = sortedList(filteredTodos, seletedSortOption) // Basic Sort
-
-    const totalPages = Math.ceil(filteredTodos.length / RecordsPerPage)
-
-    const startIndex = (pageNumber > totalPages ? (pageNumber - 1) - 1 : pageNumber - 1) * RecordsPerPage
-    const endIndex = startIndex + RecordsPerPage
-    const paginatedTodo = filteredTodos.slice(startIndex, endIndex)
-
+    const totalPages = (fetchedApiDetails) ? Math.ceil(parseInt(fetchedApiDetails.totalRecords) / RECORDS_PER_PAGE) : 0
+    const startIndex = (pageNumber > totalPages ? (pageNumber - 1) - 1 : pageNumber - 1) * RECORDS_PER_PAGE
+    console.log(startIndex)
+    const endIndex = startIndex + RECORDS_PER_PAGE
     const displayPages = buildPagination(pageNumber, totalPages)
 
     const handleAddTodo = async() => {
@@ -79,7 +72,6 @@ function TodoApp() {
         } finally {
             setLoading(false)
         }
-
     }
 
     const handleDelete = async() => {
@@ -92,7 +84,7 @@ function TodoApp() {
                     return item.todo_id !== confirmDel
                 })
                 setTodoItems(filteredList)
-                const newPageTotal = Math.ceil(filteredList.length / RecordsPerPage)
+                const newPageTotal = Math.ceil(filteredList.length / RECORDS_PER_PAGE)
                 if (pageNumber > newPageTotal) {
                     setPageNumber(pageNumber - 1)
                 }
@@ -211,11 +203,6 @@ function TodoApp() {
         setPageNumber(selectedPage)
     }
 
-
-    const showConfirmDelete = ()=>{
-
-    }
-
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 p-3 text-center">Todo App</h1>
@@ -240,7 +227,7 @@ function TodoApp() {
                     handleSort={handleSort}
                 />
                 <TodoList
-                    filteredTodos={paginatedTodo}
+                    filteredTodos={todoItems}
                     handleDelete={(id)=>setConfirmDel(id)}
                     handleEdit={handleEdit}
                     handleStatus={handleStatus}

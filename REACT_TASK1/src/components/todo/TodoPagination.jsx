@@ -5,7 +5,7 @@ Edge Case 10 - it should handle but with fail safe.. if the 5000 is not exists t
 
 function TodoPagination({ currentPage, totalPages, handlePage, displayPages }) {
     return (
-        <nav aria-label="Pagination" className="flex space-x-4 justify-center mt-8">
+        <nav aria-label="Pagination" className="flex space-x-4 justify-center mt-8 pb-8">
             {
                 displayPages.length > 0 && (
                     <>
@@ -13,7 +13,7 @@ function TodoPagination({ currentPage, totalPages, handlePage, displayPages }) {
                             aria-disabled={currentPage === 1}
                             disabled={currentPage === 1}
                             aria-label="Previous page"
-                            className={`flex items-center justify-center shrink-0 bg-gray-200 w-9 h-9 rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-neutral-800 dark:text-slate-50 dark:hover:bg-neutral-700 ${currentPage === 1 ? 'bg-gray-100 cursor-default' : ''}`}
+                            className={`flex items-center justify-center shrink-0 bg-gray-200 w-9 h-9 rounded-md dark:bg-neutral-800 dark:text-slate-50 dark:hover:bg-neutral-700 ${currentPage === 1 ? 'bg-gray-100 cursor-default' : ''}`}
                             onClick={() => handlePage(currentPage - 1)}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,9 @@ function TodoPagination({ currentPage, totalPages, handlePage, displayPages }) {
                                     key={page}
                                     onClick={() => handlePage(page)}
                                     aria-current="page"
-                                    className="flex items-center justify-center shrink-0 text-sm font-semibold text-white w-9 h-9 rounded-md bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"> {page} </button>
+                                    aria-disabled={currentPage == page}
+                                    disabled={currentPage == page}
+                                    className={`flex items-center justify-center shrink-0 text-sm font-semibold text-slate-900 w-9 h-9 rounded-md  dark:bg-neutral-800 dark:text-slate-50 dark:hover:bg-neutral-700 border-b border-slate-300 ${currentPage == page ? 'text-white bg-blue-600 cursor-default' : '' }`}> {page} </button>
                             })
                         }
                         <button
@@ -39,7 +41,7 @@ function TodoPagination({ currentPage, totalPages, handlePage, displayPages }) {
                             onClick={() => handlePage(currentPage + 1)}
                             aria-disabled={currentPage === totalPages}
                             disabled={currentPage === totalPages}
-                            className={`flex items-center justify-center shrink-0 bg-gray-200 w-9 h-9 rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-neutral-800 dark:text-slate-50 dark:hover:bg-neutral-700 ${currentPage === totalPages ? 'bg-gray-100 cursor-default' : ''}`}
+                            className={`flex items-center justify-center shrink-0 bg-gray-200 w-9 h-9 rounded-md  dark:bg-neutral-800 dark:text-slate-50 dark:hover:bg-neutral-700 ${currentPage === totalPages ? 'bg-gray-100 cursor-default' : ''}`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="fill-slate-600 size-3 overflow-visible dark:fill-slate-50"
                                 viewBox="0 0 451.846 451.847" aria-hidden="true">

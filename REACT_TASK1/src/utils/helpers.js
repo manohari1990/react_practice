@@ -1,3 +1,5 @@
+import { RECORDS_PER_PAGE } from "./Constants";
+
 export function sortedList(list, seletedSortOption) {
     switch (seletedSortOption) {
         case 'newest':
@@ -46,7 +48,7 @@ export function buildPagination(currentPage, totalPages) {
     return displayPages
 }
 
-export const buildQueryParams = (search, seletedSortOption, filter) => {
+export const buildQueryParams = (search, seletedSortOption, filter, pageNumber) => {
     const queryParam = {
         'sortBy':
             seletedSortOption === "newest" ||
@@ -57,7 +59,9 @@ export const buildQueryParams = (search, seletedSortOption, filter) => {
             seletedSortOption === "oldest" ||
             seletedSortOption === "a-z"
                 ? "ASC"
-                : "DESC"
+                : "DESC",
+        'page': pageNumber,
+        'limit': RECORDS_PER_PAGE
     }
 
     if(filter.priority !== 'all') queryParam.priority = filter.priority

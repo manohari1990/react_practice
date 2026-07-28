@@ -5,7 +5,9 @@ import { buildUpdateQuery, buildInsertQuery } from '../utils/helpers.js'
 export const allTodos = async(filters) =>{
     const conditions = []
     const values = []
-    let sql = 'SELECT *, due_date::text AS due_date FROM user_todos'
+    let sql = 'SELECT *, due_date::text AS due_date FROM user_todos '
+    let countSql = 'SELECT COUNT(*) FROM user_todos'
+    let totalRecords = 0
     
     if(filters.search){
         conditions.push(` ( title ILIKE $${values.length + 1} OR details ILIKE $${values.length + 1} ) `)
@@ -19,18 +21,33 @@ export const allTodos = async(filters) =>{
         conditions.push(`status = $${values.length + 1}`)
         values.push(filters.status)
     }
-
+    
     if(conditions.length > 0){
         sql += " WHERE "+ conditions.join(" AND ")
     }
+    
     
     const sortBy = allowedSortFields.includes(filters.sortBy) ? filters.sortBy : DEFAULT_SORT_BY
     const order = filters.order?.toUpperCase() === 'ASC' ? 'ASC' : DEFAULT_ORDER
     sql += ` ORDER BY ${sortBy} ${order} `
 
+    if(filters.page){ // DEFAULT_PAGE_LIMIT
+        countSql += conditions.length > 0 ? ` WHERE ${conditions.join(" AND ")}` : ''
+        const dbRecordsCount = await query(countSql, values)
+        totalRecords = dbRecordsCount.rows[0]['count']
+        const limit = filters.limit ? filters.limit : DEFAULT_PAGE_LIMIT
+        sql += `OFFSET ${(filters.page-1)* limit} LIMIT ${limit}`
+    }
+    console.log(sql,"======sql")
     try{
         const result = await query(sql,values)
-        return result.rows
+        return {
+            'totalRecords': totalRecords,
+            'records': result.rows,
+            'page': filters.page,
+            'limit': filters.limit,
+            'success': true
+        }
     }catch(err){
         console.error(err)
     }
