@@ -8,6 +8,7 @@ import TodoPagination from './TodoPagination'
 import { sortedList, buildPagination, buildQueryParams } from '../../utils/helpers'
 import { RecordsPerPage, INITIAL_TODO_FORM } from '../../utils/Constants'
 import { getAllTodos, saveTodo, updateTodo, deleteTodoByID } from '../../services/todoService'
+import ConfirmDelete from "./ConfirmDelete"
 
 function TodoApp() {
 
@@ -21,6 +22,7 @@ function TodoApp() {
     const [seletedSortOption, setSeletedSortOption] = useState('newest')
     const [pageNumber, setPageNumber] = useState(1)
     const [httpError, setHttpError] = useState('')
+    const [confirmDel, setConfirmDel] = useState(null)
 
     const loadTodos = async (params) => {
         setLoading(true)
@@ -55,7 +57,7 @@ function TodoApp() {
 
     const displayPages = buildPagination(pageNumber, totalPages)
 
-    const handleAddTodo = async () => {
+    const handleAddTodo = async() => {
         setLoading(true)
         if (todoForm.title.trim() === '') return;
         let newTodo = {
@@ -80,14 +82,14 @@ function TodoApp() {
 
     }
 
-    const handleDelete = async (id) => {
+    const handleDelete = async() => {
         setLoading(true)
         try {
-            const resposne = await deleteTodoByID(id)
+            const resposne = await deleteTodoByID(confirmDel)
             if (resposne.length > 0) {
                 const filteredList = todoItems.filter(item => {
-                    console.log(item.todo_id, id)
-                    return item.todo_id !== id
+                    console.log(item.todo_id, confirmDel)
+                    return item.todo_id !== confirmDel
                 })
                 setTodoItems(filteredList)
                 const newPageTotal = Math.ceil(filteredList.length / RecordsPerPage)
@@ -102,6 +104,7 @@ function TodoApp() {
             console.error(err)
         } finally {
             setLoading(false)
+            setConfirmDel(null)
         }
     }
 
@@ -121,16 +124,27 @@ function TodoApp() {
         setTodoForm(INITIAL_TODO_FORM)
     }
 
-    const handleStatus = (status, id) => {
-        const updatedList = todoItems.map(todo => {
-            return id === todo.todo_id
-                ? {
-                    ...todo,
-                    'status': status ? 'completed' : 'pending'
-                } :
-                todo
-        })
-        setTodoItems(updatedList)
+    const handleStatus = async (status, id) => {
+        const updatedItem = todoItems.find((todo => todo.todo_id === id))
+        try {
+            const response = await updateTodo(id, { 'status': status ? 'completed' : 'pending' })
+            if (response.length > 0) {
+                const updatedList = todoItems.map(todo => {
+                    return id === todo.todo_id
+                        ? {
+                            ...todo,
+                            'status': status ? 'completed' : 'pending'
+                        } :
+                        todo
+                })
+                setTodoItems(updatedList)
+            }
+        } catch (err) {
+            console.error(err)
+        } finally {
+            setLoading(false)
+        }
+
     }
 
     const handleUpdateItem = async () => {
@@ -197,6 +211,11 @@ function TodoApp() {
         setPageNumber(selectedPage)
     }
 
+
+    const showConfirmDelete = ()=>{
+
+    }
+
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 p-3 text-center">Todo App</h1>
@@ -221,8 +240,8 @@ function TodoApp() {
                     handleSort={handleSort}
                 />
                 <TodoList
-                    filteredTodos={[]}
-                    handleDelete={handleDelete}
+                    filteredTodos={paginatedTodo}
+                    handleDelete={(id)=>setConfirmDel(id)}
                     handleEdit={handleEdit}
                     handleStatus={handleStatus}
                 />
@@ -232,6 +251,7 @@ function TodoApp() {
                     handlePage={handlePage}
                     displayPages={displayPages}
                 />
+                {confirmDel && <ConfirmDelete deleteConfirmed={handleDelete} setConfirmDelete={setConfirmDel} />  }
             </div>
         </div>
     )
