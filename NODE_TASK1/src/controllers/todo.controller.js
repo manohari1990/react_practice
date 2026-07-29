@@ -31,7 +31,7 @@ export const updateTodo = async(req, res)=>{
     const todoBody = req.body
     try{
         const updatedRecord = await updateTodoService(id, todoBody)
-        if (updatedRecord.length > 0) return res.status(200).json(updatedRecord)
+        return res.status(200).json(updatedRecord)
         return res.status(404).json({
             'message': "Todo not found"
         })
@@ -47,7 +47,7 @@ export const deleteTodoById = async(req, res) =>{
     const { id } = req.params
     try{
         const deletedRecord = await deleteTodoByIdService(id)
-        if (deletedRecord.length > 0) return res.status(200).json(deletedRecord)
+        return res.status(200).json(deletedRecord)
         return res.status(404).json({
             'message': "Todo not found"
         })

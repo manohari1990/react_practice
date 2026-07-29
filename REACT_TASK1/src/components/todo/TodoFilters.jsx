@@ -28,7 +28,7 @@ function TodoFilters({ handleFilter, activeFilters, search, handleSearch, selete
                     </div>
                     <div
                         className="flex items-center gap-2.5 px-3 py-2.5 rounded-md bg-white dark:bg-neutral-800 outline-1 -outline-offset-1 outline-slate-300 dark:outline-neutral-700 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-600">
-                        <label for="search" className="sr-only">Search</label>
+                        <label htmlFor="search" className="sr-only">Search</label>
                         <input
                             type="search"
                             id="search"

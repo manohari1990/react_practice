@@ -9,6 +9,7 @@ import { sortedList, buildPagination, buildQueryParams } from '../../utils/helpe
 import { RECORDS_PER_PAGE, INITIAL_TODO_FORM } from '../../utils/Constants'
 import { getAllTodos, saveTodo, updateTodo, deleteTodoByID } from '../../services/todoService'
 import ConfirmDelete from "./ConfirmDelete"
+import Spinner from "../Spinner"
 
 function TodoApp() {
 
@@ -46,7 +47,6 @@ function TodoApp() {
 
     const totalPages = (fetchedApiDetails) ? Math.ceil(parseInt(fetchedApiDetails.totalRecords) / RECORDS_PER_PAGE) : 0
     const startIndex = (pageNumber > totalPages ? (pageNumber - 1) - 1 : pageNumber - 1) * RECORDS_PER_PAGE
-    console.log(startIndex)
     const endIndex = startIndex + RECORDS_PER_PAGE
     const displayPages = buildPagination(pageNumber, totalPages)
 
@@ -78,20 +78,11 @@ function TodoApp() {
         setLoading(true)
         try {
             const resposne = await deleteTodoByID(confirmDel)
-            if (resposne.length > 0) {
-                const filteredList = todoItems.filter(item => {
-                    console.log(item.todo_id, confirmDel)
-                    return item.todo_id !== confirmDel
-                })
-                setTodoItems(filteredList)
-                const newPageTotal = Math.ceil(filteredList.length / RECORDS_PER_PAGE)
-                if (pageNumber > newPageTotal) {
-                    setPageNumber(pageNumber - 1)
-                }
+            if (resposne.success) {
+                loadTodos(buildQueryParams(search, seletedSortOption, filter, pageNumber))
             } else {
                 setHttpError("Try Again!")
             }
-
         } catch (err) {
             console.error(err)
         } finally {
@@ -117,10 +108,11 @@ function TodoApp() {
     }
 
     const handleStatus = async (status, id) => {
+        setLoading(true)
         const updatedItem = todoItems.find((todo => todo.todo_id === id))
         try {
             const response = await updateTodo(id, { 'status': status ? 'completed' : 'pending' })
-            if (response.length > 0) {
+            if (response.success) {
                 const updatedList = todoItems.map(todo => {
                     return id === todo.todo_id
                         ? {
@@ -141,28 +133,26 @@ function TodoApp() {
 
     const handleUpdateItem = async () => {
         if (todoForm.title.trim() === '') return;
-        const updatedList = todoItems.map(todo => {
-            return todoForm.todo_id === todo.todo_id
-                ? {
-                    ...todo,
-                    'title': todoForm.title,
-                    'details': todoForm.details,
-                    'due_date': todoForm.due_date,
-                    'priority': todoForm.priority
-                } : todo
-        })
-        console.log(updatedList)
-        setTodoItems(updatedList)
         setLoading(true)
         try {
-            const res = await updateTodo(selectedUpdateId, {
+            const updatedStatus = {
                 'title': todoForm.title,
                 'details': todoForm.details,
                 'due_date': todoForm.due_date,
                 'priority': todoForm.priority,
                 'status': todoForm.status
-            })
-            console.log(res)
+            }
+            const res = await updateTodo(selectedUpdateId, updatedStatus)
+            if(res.success){
+                const updatedList = todoItems.map(todo => {
+                    return todoForm.todo_id === todo.todo_id
+                        ? {
+                            ...todo,
+                            ...updatedStatus
+                        } : todo
+                })
+                setTodoItems(updatedList)
+            }
         } catch (err) {
             console.error(err)
         } finally {
@@ -205,6 +195,7 @@ function TodoApp() {
 
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            {loading && <Spinner /> }
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 p-3 text-center">Todo App</h1>
             <hr className="mb-10 mt-5 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
             <div className="max-w-lg mx-auto">

@@ -38,7 +38,6 @@ export const allTodos = async(filters) =>{
         const limit = filters.limit ? filters.limit : DEFAULT_PAGE_LIMIT
         sql += `OFFSET ${(filters.page-1)* limit} LIMIT ${limit}`
     }
-    console.log(sql,"======sql")
     try{
         const result = await query(sql,values)
         return {
@@ -56,7 +55,13 @@ export const allTodos = async(filters) =>{
 export const todoById = async(id) =>{
     try{
         const result = await query('select * from user_todos where todo_id = $1', [id])
-        return result.rows[0]
+        return result.rows.length > 0 ?{
+                    'records': result.rows[0],
+                    'success': true
+                } : {
+                    'records': [],
+                    'success': true
+                }
     }catch(err){
         console.error(err)
         throw err;
@@ -69,7 +74,13 @@ export const saveTodoRepo = async(todoBody) => {
     console.log(sql,values)
     try{
         const response = await query(sql, values)
-        return response.rows
+        return response.rows.length > 0 ?{
+                    'records': response.rows[0],
+                    'success': true
+                } : {
+                    'records': [],
+                    'success': true
+                }
     }catch(err){
         console.error(err)
         throw err
@@ -80,7 +91,13 @@ export const updateTodoRepo = async(id, todoBody) =>{
     const {sql,newValues} = buildUpdateQuery(id, todoBody)
     try{
         const response = await query(sql, newValues)
-        return response.rows
+        return response.rows.length > 0 ?{
+                    'records': response.rows[0],
+                    'success': true
+                } : {
+                    'records': [],
+                    'success': true
+                }
     }catch(err){
         console.log(err)
         throw err
@@ -91,7 +108,13 @@ export const deleteTodoByIdRepo = async(id) =>{
     const sql = ` DELETE FROM user_todos WHERE todo_id = $1 RETURNING * `
     try{
         const response = await query(sql, [id])
-        return response.rows
+        return response.rows.length > 0 ?{
+                    'records': response.rows[0],
+                    'success': true
+                } : {
+                    'records': [],
+                    'success': true
+                }
     }catch(err){
         console.error(err)
         throw err
@@ -100,5 +123,4 @@ export const deleteTodoByIdRepo = async(id) =>{
 
 
 
-// Server-side pagination – Add page and limit support using LIMIT and OFFSET.
 // Basic validation – Return 400 Bad Request for invalid input (e.g., empty title or invalid priority).

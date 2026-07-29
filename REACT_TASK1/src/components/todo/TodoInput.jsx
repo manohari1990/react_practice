@@ -106,6 +106,7 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
                                 id="todo-due_date"
                                 name="due_date"
                                 type='date'
+                                min={!isUpdate ? (new Date().toISOString().split("T")[0]).toString() : todoForm.due_date}
                                 value={todoForm.due_date}
                                 placeholder="Todo Due Date"
                                 onChange={(e) => handleInputChange(e.target.name, e.target.value)}

@@ -6,7 +6,7 @@ function TodoItem({ todo, handleDelete, handleEdit, handleStatus }) {
         <tr id={todo.todo_id} key={todo.todo_id} className="has-[:checked]:bg-blue-50/50 dark:has-[:checked]:bg-blue-900/10">
             <td className="w-8 pl-3 py-4">
                 <label className="group has-[input:checked]:text-slate-900 inline-block">
-                    <input type="checkbox" className="sr-only row-checkbox" checked={todo.status == 'completed'} onChange={(e) => handleStatus(e.target.checked, todo.todo_id)} />
+                    <input type="checkbox" className="sr-only row-checkbox" checked={todo.status === 'completed'} onChange={(e) => handleStatus(e.target.checked, todo.todo_id)} />
                     <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded outline-1 outline-slate-300 dark:outline-neutral-700
                                  bg-white dark:bg-neutral-800
                                  group-has-[input:checked]:bg-blue-600
