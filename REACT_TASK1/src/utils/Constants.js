@@ -13,6 +13,21 @@ export const TodoFilterLabels = [
     }
 ]
 
+export const TodoStatusOptions = [
+    {
+        'label': 'Completed',
+        'value': 'completed'
+    },
+    {
+        'label': 'Backlog',
+        'value': 'pending'
+    },
+    {
+        'label': 'On-Hold',
+        'value': 'hold'
+    }
+]
+
 export const SortingLabels = [
     {
         'label': 'Newest',

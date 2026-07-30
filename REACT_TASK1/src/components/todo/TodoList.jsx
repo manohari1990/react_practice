@@ -1,7 +1,9 @@
 // Responsible only for listing all todo items
+import { RECORDS_PER_PAGE } from "../../utils/Constants"
 import TodoItem from "./TodoItem"
+import TodoListSkeleton from "./TodoListSkeleton"
 
-function TodoList({ filteredTodos, handleDelete, handleEdit, handleStatus }) {
+function TodoList({ filteredTodos, handleDelete, handleEdit, handleStatus, isLoading }) {
     return (
         <div className="overflow-x-auto px-4 md:px-8 mt-6">
             {filteredTodos.length > 0 ?
@@ -69,23 +71,31 @@ function TodoList({ filteredTodos, handleDelete, handleEdit, handleStatus }) {
                             <th scope="col" className="px-3 py-3.5">Actions</th>
                         </tr>
                     </thead>
-
-                    <tbody className="text-sm divide-y divide-slate-200 dark:divide-neutral-700">
-                        {filteredTodos.length > 0 && filteredTodos.map((todo) => {
-                            return <TodoItem
-                                key={todo.todo_id}
-                                todo={todo}
-                                handleDelete={handleDelete}
-                                handleEdit={handleEdit}
-                                handleStatus={handleStatus}
-                            />
-                        })}
-                    </tbody>
+                     {
+                     isLoading 
+                        ?  <tbody className="rounded-lg p-4 animate-pulse">
+                            {
+                                Array.from({length:RECORDS_PER_PAGE}).map((_, index)=> {
+                                    return  <TodoListSkeleton key={index}/>
+                                })
+                            }</tbody>
+                        : <tbody className="text-sm divide-y divide-slate-200 dark:divide-neutral-700">
+                            {filteredTodos.length > 0 && filteredTodos.map((todo) => {
+                                return <TodoItem
+                                    isLoading={isLoading}
+                                    key={todo.todo_id}
+                                    todo={todo}
+                                    handleDelete={handleDelete}
+                                    handleEdit={handleEdit}
+                                    handleStatus={handleStatus}
+                                />
+                            })}
+                        </tbody>
+                    }
                 </table>
                 : <div className="flex items-center justify-center p-5 m-5">No Records Found!</div>
             }
         </div>
-
     )
 }
 

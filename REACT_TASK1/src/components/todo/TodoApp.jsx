@@ -25,9 +25,11 @@ function TodoApp() {
     const [httpError, setHttpError] = useState('')
     const [confirmDel, setConfirmDel] = useState(null)
     const [fetchedApiDetails, setFetchedApiDetails] = useState(null)
+    const [skeletonLoading, setSkeletonLoading] = useState(false)
     
     const loadTodos = async (params) => {
         setLoading(true)
+        setSkeletonLoading(true)
         try {
             const response = await getAllTodos(params)
             if(response.success) {
@@ -38,6 +40,7 @@ function TodoApp() {
             console.error(e)
         } finally {
             setLoading(false)
+            setSkeletonLoading(false)
         }
     }
 
@@ -63,9 +66,9 @@ function TodoApp() {
         try {
             const serverResponse = await saveTodo(newTodo)
             console.log(serverResponse)
-            setTodoItems((prev) => {
-                return [newTodo, ...prev]
-            })
+            if(serverResponse.success){
+                loadTodos(buildQueryParams(search, seletedSortOption, filter, pageNumber))
+            }
             setTodoForm(INITIAL_TODO_FORM)
         } catch (e) {
             console.error(e)
@@ -144,14 +147,7 @@ function TodoApp() {
             }
             const res = await updateTodo(selectedUpdateId, updatedStatus)
             if(res.success){
-                const updatedList = todoItems.map(todo => {
-                    return todoForm.todo_id === todo.todo_id
-                        ? {
-                            ...todo,
-                            ...updatedStatus
-                        } : todo
-                })
-                setTodoItems(updatedList)
+                loadTodos(buildQueryParams(search,seletedSortOption, filter, pageNumber))
             }
         } catch (err) {
             console.error(err)
@@ -194,8 +190,8 @@ function TodoApp() {
     }
 
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {loading && <Spinner /> }
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+            {/* {loading && <Spinner /> } */}
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 p-3 text-center">Todo App</h1>
             <hr className="mb-10 mt-5 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400" />
             <div className="max-w-lg mx-auto">
@@ -222,6 +218,7 @@ function TodoApp() {
                     handleDelete={(id)=>setConfirmDel(id)}
                     handleEdit={handleEdit}
                     handleStatus={handleStatus}
+                    isLoading={skeletonLoading}
                 />
                 <TodoPagination
                     currentPage={pageNumber}
