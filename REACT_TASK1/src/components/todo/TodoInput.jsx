@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import AISpeechInput from './AISpeechInput'
 import AIInput from './AIInput'
-import {TodoPriorityOption} from '../../utils/Constants'
+import { TodoPriorityOption, TodoStatusOptions } from '../../utils/Constants'
 
 function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpdate, handleInputChange, isUpdate }) {
     const [enableListening, setEnableListening] = useState(false)
@@ -22,38 +22,34 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
                     className="block mb-2.5 text-sm font-medium text-heading">
                     Todo Title
                 </label>
-
-                <div className="flex items-start gap-2">
-                    <div className='w-full relative'>
+                <div className="mt-2">
+                    <div className="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 relative px-2">
+                        {/* <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">$</div> */}
                         <input
                             id="todo-title"
                             name="title"
                             value={todoForm.title}
                             placeholder="Todo Title"
                             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-                            className="flex-1 w-full rounded-lg border border-gray-300 text-heading text-sm px-3 py-2.5"
-                            required
-                        />
+                            className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
                         <AIInput
                             inputName="title"
                             input={todoForm.title}
                             context={"improveTodo"}
                             onAccept={handleInputChange}
-                            htmlClass='absolute right-0'
+                            htmlClass='flex items-center pr-1 focus-within:relative'
                         />
+
                     </div>
-
-
-                    <AISpeechInput
+                </div>
+                {/* <AISpeechInput
                         inputName="title"
                         captureSpeech={captureSpeech}
                         enableListening={enableListening}
                         setEnableListening={setEnableListening}
-                    />
-
-                </div>
+                    /> */}
             </div>
-            
+
             <div className='mb-5'>
                 <label
                     htmlFor="todo-title"
@@ -61,15 +57,15 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
                     Todo Details
                 </label>
 
-                <div className="flex items-center gap-2">
-                    <div className='w-full relative'>
+                <div className="mt-2">
+                    <div className="flex items-start rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 relative px-2">
                         <textarea
                             placeholder='Todo Details'
                             value={todoForm.details}
-                            className="w-full rounded-lg border-gray-300 border text-heading text-sm px-3 py-2.5"
+                            className="block grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
                             name='details'
                             cols={25}
-                            rows={3}
+                            rows={2}
                             onChange={(e) => handleInputChange(e.target.name, e.target.value)}
                             required
                         >
@@ -80,28 +76,28 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
                             input={todoForm.details}
                             context={"improveTodo"}
                             onAccept={handleInputChange}
-                            htmlClass='absolute right-0'
+                            htmlClass='flex items-center pr-1 focus-within:relative'
                         />
                     </div>
 
-                    <AISpeechInput
+                    {/* <AISpeechInput
                         inputName="title"
                         captureSpeech={captureSpeech}
                         enableListening={enableListening}
                         setEnableListening={setEnableListening}
-                    />
+                    /> */}
                 </div>
             </div>
-            <div className='flex item-start gap-2'>
+            <div className='flex items-center justify-between'>
                 <div className='mb-5'>
                     <label
-                        htmlFor="todo-due_date"
+                        htmlFor="todo-title"
                         className="block mb-2.5 text-sm font-medium text-heading">
                         Due Date
                     </label>
 
-                    <div className="flex items-start gap-2">
-                        <div className='w-full relative'>
+                    <div className="mt-2">
+                        <div className="flex items-start rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 relative px-2">
                             <input
                                 id="todo-due_date"
                                 name="due_date"
@@ -110,7 +106,7 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
                                 value={todoForm.due_date}
                                 placeholder="Todo Due Date"
                                 onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-                                className="flex-1 w-full rounded-lg border border-gray-300 text-heading text-sm px-3 py-2.5"
+                                className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
                                 required
                             />
                         </div>
@@ -118,22 +114,47 @@ function TodoInput({ todoForm, handleAddTodo, handleUpdateItem, handleCancelUpda
                 </div>
                 <div className='mb-5'>
                     <label
-                        htmlFor="todo-priority"
+                        htmlFor="todo-title"
                         className="block mb-2.5 text-sm font-medium text-heading">
                         Priority
                     </label>
 
-                    <div className="flex items-start gap-2">
-                        <div className='w-full relative'>
+                    <div className="mt-2">
+                        <div className="flex items-start rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 relative px-2">
                             <select
                                 id='priority'
                                 name='priority'
                                 value={todoForm.priority}
                                 onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-                                className='flex-1 rounded-lg border border-gray-300 text-heading text-sm px-3 py-2.5'
+                                className='block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6'
                             >   <option key="1234">--Select--</option>
                                 {
                                     TodoPriorityOption.length > 0 && TodoPriorityOption.map(option => {
+                                        return <option key={option.value} value={option.value}>{option.label}</option>
+                                    })
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div className='mb-5'>
+                    <label
+                        htmlFor="todo-title"
+                        className="block mb-2.5 text-sm font-medium text-heading">
+                        Status
+                    </label>
+
+                    <div className="mt-2">
+                        <div className="flex items-start rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 relative px-2">
+                            <select
+                                id='status'
+                                name='status'
+                                value={todoForm.status}
+                                onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                                className='block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6'
+                            >   <option key="status1">--Select--</option>
+                                {
+                                    TodoStatusOptions.length > 0 && TodoStatusOptions.map(option => {
                                         return <option key={option.value} value={option.value}>{option.label}</option>
                                     })
                                 }
