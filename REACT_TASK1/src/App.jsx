@@ -5,6 +5,7 @@ import TemperatureConverter from './components/TemperatureConverter';
 import TodoApp from './components/todo/TodoApp'
 import Greeting from './components/Greeting';
 import DummyPhotos from './components/DummyPhotos';
+import Authentication from './components/user/Authentication';
 
 function App() {
 
@@ -17,7 +18,11 @@ function App() {
       */}
       
       {/* <TemperatureConverter /> // Re-usable states & component demonstration */}
-      <TodoApp />
+
+
+
+      <Authentication />
+      {/* <TodoApp /> */}
     </div>
   );
 }
