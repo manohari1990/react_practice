@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS users(
 	phone VARCHAR(20),
 	first_name VARCHAR(255) NOT NULL,
 	last_name VARCHAR(255),
-	password_hash TEXT NOT NULL,
+	password TEXT NOT NULL,
 	user_status user_statuses NOT NULL DEFAULT 'active',
 	created_at TIMESTAMPTZ DEFAULT current_timestamp,
 	updated_at TIMESTAMPTZ DEFAULT current_timestamp

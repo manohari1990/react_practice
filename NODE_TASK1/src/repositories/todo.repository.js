@@ -1,5 +1,5 @@
 import { query } from '../config/database.js'
-import { DEFAULT_PAGE_LIMIT, DEFAULT_SORT_BY, DEFAULT_ORDER, allowedSortFields } from '../Constant.js'
+import { DEFAULT_PAGE_LIMIT, DEFAULT_SORT_BY, DEFAULT_ORDER, allowedSortFields, NEW_UPDATE_TODO_RETURN_FROM_DB } from '../Constant.js'
 import { buildUpdateQuery, buildInsertQuery } from '../utils/helpers.js'
 
 export const allTodos = async(filters) =>{
@@ -70,8 +70,8 @@ export const todoById = async(id) =>{
 
 export const saveTodoRepo = async(todoBody) => {
     
-    const {sql,values} = buildInsertQuery(todoBody)
-    console.log(sql,values)
+    const {sql,values} = buildInsertQuery(todoBody, "user_todos", NEW_UPDATE_TODO_RETURN_FROM_DB)
+    console.log(sql, values)
     try{
         const response = await query(sql, values)
         return response.rows.length > 0 ?{

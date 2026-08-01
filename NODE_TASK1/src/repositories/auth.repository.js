@@ -1,9 +1,39 @@
+import { query } from '../config/database.js'
+import { buildInsertQuery } from '../utils/helpers.js'
+import {NEW_UPDATE_USER_RETURN_FROM_DB} from '../Constant.js'
 
 export const userRegisterRepo = async (payload) => {
+    const {sql, values} = buildInsertQuery(payload, "users", NEW_UPDATE_USER_RETURN_FROM_DB)
+    console.log(sql, values)
     // SQL to save new user
-    try {
-
+    try{
+        const response = await query(sql, values)
+        return (response.rows.length > 0) ? {
+            'success': true,
+            'records': response.rows[0],
+            'message': 'New user created successfully!'
+        }:{
+            'success': true,
+            'records': []
+        }
     } catch (err) {
-        console.log(err)
+        console.error(err)
+        if (err.code === '23505') {
+            throw new AppError(409, 'Username or email already exists');
+        }
+        throw err
+    }
+}
+
+
+export const checkDuplicateUser = async(email, username) =>{
+    const sql = `SELECT email, username FROM users WHERE email = $1 OR username = $2`
+    try{
+        const dupRecords = await query(sql,[email, username])
+        if (dupRecords.rowCount > 0)
+            return dupRecords.rows
+    }catch(err){
+        console.error(err)
+        throw err;
     }
 }

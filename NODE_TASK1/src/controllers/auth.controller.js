@@ -1,25 +1,33 @@
+import { AppError } from '../config/AppError.js';
 import { userRegisterService } from '../services/auth.service.js'
 import { validationResult } from "express-validator";
 
 export const userRegister = async (req, res) => {
     const validationRes = validationResult(req)
     if(!validationRes.isEmpty()){
-        console.log(validationRes.array())
-    }else{
-        console.log("validation pass")
+        return res.status(400).json({
+            success: false,
+            errors: validationRes.array()
+        })
     }
 
-    // const payload = req.body
-    // console.log(payload)
-    // try {
-    //     const response = await userRegisterService(payload)
-    //     return res.status(201).json(response)
-    // } catch (err) {
-    //     console.log(err)
-    //     res.status(500).json({
-    //         message: 'Internal server error!',
-    //         success: false
-    //     })
-    // }
+    const payload = req.body
+    try {
+        const response = await userRegisterService(payload)
+        return res.status(200).json(response)
+    } catch (err) {
+        // console.error(err)
+        if(err instanceof AppError){
+            // console.log(err.message)
+            return res.status(err.statusCode).json({
+                success: false,
+                error: err.error,
+                message: err.message
+            })
+        }
+        res.status(500).json({
+            message: 'Internal server error!',
+            success: false
+        })
+    }
 }
-//extract params

@@ -3,12 +3,27 @@ import { userRegister } from '../controllers/auth.controller.js';
 import { body } from "express-validator";
 
 const ValidationRules = [
-    body('username').notEmpty().withMessage("").bail()
-                    .isLength({ min: 8, max: 15 }).withMessage('Please enter valid username.').escape(), // also provide special char validation
+    body('username').notEmpty().withMessage("Username should not be empty.").bail()
+        .isLength({ min: 6, max: 15 }).withMessage('username length should not less thatn 8 and more than 15 characters.').bail()
+        .matches(/^[a-zA-Z0-9_]+$/).withMessage('Only alphanumeric values and underscores allowed!'),
+         // also provide special char validation
     body('email').isEmail().withMessage('Please enter valid email.').normalizeEmail(),
-    body('phone').optional().isMobilePhone().withMessage('Please enter valid Phone number.'),
-    body('first_name').notEmpty().withMessage('Please enter First Name.').escape(),
-    body('password').notEmpty().isLength({ min: 8 }).withMessage('Please enter password, minimum 8 characters').escape()
+
+    body('phone').optional().isMobilePhone("en-IN").withMessage('Please enter valid Phone number.'),
+
+    body('first_name').notEmpty().withMessage('Please enter First Name.').bail()
+        .isLength({ min: 2, max: 50 }).withMessage("Please enter valid name").bail()
+        .matches(/^[a-zA-Z]+$/).withMessage("Special characters are not allowed!"),
+
+    body('last_name').optional().matches(/^[a-zA-Z]+$/).withMessage("Special characters are not allowed!"),
+
+    body('password').isStrongPassword({
+        minLength: 8,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1
+    }).withMessage("Must be at least 8 characters long and include an uppercase letter, lowercase letter, number, and special character.")
 ]
 
 const authRouter = Router()
