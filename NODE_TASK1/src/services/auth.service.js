@@ -1,6 +1,7 @@
-import { userRegisterRepo, checkDuplicateUser } from '../repositories/auth.repository.js'
+import { userRegisterRepo, checkDuplicateUser, userLoginRepo } from '../repositories/auth.repository.js'
 import bcrypt from "bcrypt";
 import {AppError} from "../config/AppError.js"
+import { generateToken } from '../utils/jwt.js';
 
 export const userRegisterService = async (payload) => {
     // Check duplicate - select query compare email, username, loop through the result and response back with existing username & email
@@ -34,7 +35,29 @@ export const userRegisterService = async (payload) => {
     }
 }
 
+export const loginService = async(payload)=>{
 
+    const response = await userLoginRepo(payload)
+    if(!response)
+        throw new AppError(401, "Invalid Username/Email or Password.", {});
+
+    const comparePassword = await bcrypt.compare(payload.password, response.password)
+    if(!comparePassword)
+        throw new AppError(401, "Invalid Username/Email or Password.", {});
+    if(response.user_status !== 'active')
+        throw new AppError(401, "User status is unavailable, Please contact admin.",{});
+
+    const token = generateToken({
+        sub: response.user_id,
+        username: response.username
+    })
+
+    const {password, ...userData} = response
+    return {
+        user: userData,
+        token
+    }
+}
 
 
 

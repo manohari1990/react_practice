@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { userRegister } from '../controllers/auth.controller.js';
+import { userRegister, userLogin } from '../controllers/auth.controller.js';
 import { body } from "express-validator";
 
-const ValidationRules = [
+const UserRegistrationRules = [
     body('username').notEmpty().withMessage("Username should not be empty.").bail()
         .isLength({ min: 6, max: 15 }).withMessage('username length should not less thatn 8 and more than 15 characters.').bail()
         .matches(/^[a-zA-Z0-9_]+$/).withMessage('Only alphanumeric values and underscores allowed!'),
@@ -26,8 +26,15 @@ const ValidationRules = [
     }).withMessage("Must be at least 8 characters long and include an uppercase letter, lowercase letter, number, and special character.")
 ]
 
+const UserLoginRules = [
+    body('login').trim().notEmpty().withMessage("Please Enter Username or Email."),
+    body('password').trim().notEmpty().withMessage("Please enter password.").bail()
+                    .isLength({min: 8}).withMessage("Please enter valid password.")
+]
+
 const authRouter = Router()
 
-authRouter.post('/register', ValidationRules, userRegister)
+authRouter.post('/register', UserRegistrationRules, userRegister)
+authRouter.post('/login', UserLoginRules, userLogin)
 
 export default authRouter

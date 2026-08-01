@@ -37,3 +37,15 @@ export const checkDuplicateUser = async(email, username) =>{
         throw err;
     }
 }
+
+
+export const userLoginRepo = async(payload)=>{
+    const sql = `SELECT ${NEW_UPDATE_USER_RETURN_FROM_DB.join(", ")}, password FROM users WHERE email = $1 OR username = $1`
+    try{
+        const response = await query(sql, [payload.login])
+        if(response.rowCount > 0) 
+            return response.rows[0]
+    }catch(err){
+        throw err
+    }
+}

@@ -1,9 +1,11 @@
-import express from 'express'
-import cors from 'cors'
-import todoRouter from './routes/todo.routes.js'
-import authRouter from './routes/auth.routes.js'
+import express from 'express';
+import cors from 'cors';
+import todoRouter from './routes/todo.routes.js';
+import authRouter from './routes/auth.routes.js';
+import dotenv from 'dotenv';
 
 const app = express()
+dotenv.config()
 
 app.use(cors({
     origin: 'http://localhost:8000'
