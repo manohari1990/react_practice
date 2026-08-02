@@ -1,6 +1,7 @@
 import { AppError } from '../config/AppError.js';
-import { userRegisterService, loginService } from '../services/auth.service.js'
+import { userRegisterService, loginService, saveUserSessionService } from '../services/auth.service.js'
 import { validationResult } from "express-validator";
+import {buildSessionMetadata} from '../utils/helpers.js'
 
 export const userRegister = async (req, res) => {
     const validationRes = validationResult(req)
@@ -41,14 +42,35 @@ export const userLogin = async(req, res) =>{
                 message: "Validation errors",
                 error: validateRes.array()
             })
-
-    const payload = req.body
     try{
-        const response = await loginService(payload)
+        const userRequestDetails = buildSessionMetadata(req)
+        
+        const {user, refresh_token, access_token} = await loginService(req.body)
+        const user_session = await saveUserSessionService({...userRequestDetails, 'refresh_token_hash': refresh_token, 'user_id': user.user_id})
+
+        const {password, user_id, ...userData} = user
+        res.cookie(
+            'access_token',access_token,
+            {
+                'httpOnly': true,
+                'sameSite': 'lax',
+                'maxAge': process.env.JWT_ACCESS_COOKIE_MAX_AGE,
+                'secure': false
+            }
+        )
+        res.cookie(
+            'refresh_token',refresh_token,
+            {
+                'httpOnly': true,
+                'sameSite': 'lax',
+                'maxAge': process.env.JWT_REFRESH_COOKIE_MAX_AGE,
+                'secure': false
+            }
+        )
         return res.status(200).json({
             success: true,
             message: "Login successfully!",
-            records: [response]
+            records: [userData]
         })
     }catch(err){
         if(err instanceof AppError){

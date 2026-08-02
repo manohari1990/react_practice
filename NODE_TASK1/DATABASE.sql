@@ -62,3 +62,41 @@ BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
+----------------------------------------------------------------------------------------------------------------------------
+
+-- USER SESSIONS TABLE DEFINITION
+CREATE TABLE IF NOT EXISTS user_sessions(
+	session_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+	device_type VARCHAR(50),
+	ip_address INET NOT NULL,
+	user_agent TEXT,
+	operating_system VARCHAR(100),
+	browser VARCHAR(100),
+	expires_at TIMESTAMPTZ NOT NULL,
+	refresh_token_hash TEXT NOT NULL,
+	created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMPTZ
+)
+
+
+ALTER TABLE user_sessions 
+ADD COLUMN user_id UUID,
+ADD CONSTRAINT fk_sessions_user
+FOREIGN KEY (user_id) REFERENCES users(user_id)
+ON DELETE CASCADE;
+
+-- FUNCTION TO SET EXPIRES_AT TIME
+CREATE OR REPLACE FUNCTION set_expires_at_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+	NEW.expires_at := NOW() + INTERVAL '15 minutes';
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- CREATE TRIGGER ON RECORD INSERT OR UPDATE
+CREATE TRIGGER add_expires_at_trigger
+BEFORE INSERT OR UPDATE ON user_sessions
+FOR EACH ROW
+EXECUTE FUNCTION set_expires_at_timestamp();
+

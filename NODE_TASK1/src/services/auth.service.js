@@ -1,7 +1,8 @@
-import { userRegisterRepo, checkDuplicateUser, userLoginRepo } from '../repositories/auth.repository.js'
+import { userRegisterRepo, checkDuplicateUser, userLoginRepo, saveUserSessionRepo } from '../repositories/auth.repository.js'
 import bcrypt from "bcrypt";
 import {AppError} from "../config/AppError.js"
 import { generateToken } from '../utils/jwt.js';
+import {buildSessionMetadata} from '../utils/helpers.js'
 
 export const userRegisterService = async (payload) => {
     // Check duplicate - select query compare email, username, loop through the result and response back with existing username & email
@@ -17,7 +18,6 @@ export const userRegisterService = async (payload) => {
         }
         console.info("INFO - No duplicates found!")    // Later Pino or Winston to production logs
     }catch(err){
-        // console.error(err)
         throw err
     }
     // Hash password - using bcrypt convert the password into hash and append the it to the payload
@@ -36,7 +36,6 @@ export const userRegisterService = async (payload) => {
 }
 
 export const loginService = async(payload)=>{
-
     const response = await userLoginRepo(payload)
     if(!response)
         throw new AppError(401, "Invalid Username/Email or Password.", {});
@@ -47,17 +46,25 @@ export const loginService = async(payload)=>{
     if(response.user_status !== 'active')
         throw new AppError(401, "User status is unavailable, Please contact admin.",{});
 
-    const token = generateToken({
+    const {refresh_token, access_token} = generateToken({
         sub: response.user_id,
         username: response.username
-    })
-
-    const {password, ...userData} = response
+    })    
     return {
-        user: userData,
-        token
+        user: response,
+        refresh_token,
+        access_token
     }
 }
 
+export const saveUserSessionService = async(payload) =>{
+    try{
+        const response = await saveUserSessionRepo(payload)
+        return response
+    }catch(err){
+        console.error(err)
+        throw err
+    }
+}
 
 

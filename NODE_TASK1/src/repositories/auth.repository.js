@@ -49,3 +49,14 @@ export const userLoginRepo = async(payload)=>{
         throw err
     }
 }
+
+export const saveUserSessionRepo = async(payload) =>{
+    const {sql, values} = buildInsertQuery(payload, "user_sessions")
+    try{
+        const response = await query(sql, values)
+        if(response.rowCount > 0)
+            return response.rows[0]
+    }catch(err){
+        throw err
+    }
+}

@@ -1,3 +1,4 @@
+import DeviceDetector from 'device-detector-js';
 
 function buildQuery(payload){
     const columns = []
@@ -12,9 +13,9 @@ function buildQuery(payload){
     return {columns, values, placeholders}
 }
 
-export function buildInsertQuery(payload, tableName, returns="*"){
+export function buildInsertQuery(payload, tableName, returns){
     const {columns, values, placeholders} = buildQuery(payload)
-    const sql = `INSERT INTO ${tableName}( ${columns.join(', ')} ) VALUES( ${placeholders.join(', ')} ) RETURNING ${returns.join(', ')}`
+    const sql = `INSERT INTO ${tableName}( ${columns.join(', ')} ) VALUES( ${placeholders.join(', ')} ) RETURNING ${returns ? returns.join(', ') : '*'}`
     return {sql, values}
 }
 
@@ -26,3 +27,18 @@ export function buildUpdateQuery(id, payload){
     const sql = `UPDATE user_todos SET ${updateSet.join(', ')} WHERE todo_id = $${placeholders.length+1} RETURNING *`
     return {sql, newValues}
 }
+
+export const buildSessionMetadata = (request) => {
+    const device_detector = new DeviceDetector()
+    const userAgent = request.headers['user-agent']
+    const details = device_detector.parse(userAgent)
+    const userRequestFrom = {
+        device_type: details.device?.type,
+        ip_address: request.ip,
+        operating_system: `${details.os?.name} - ${details.os?.version}`,
+        user_agent: userAgent,
+        browser: details.client?.name,
+    }
+    return userRequestFrom;
+}
+

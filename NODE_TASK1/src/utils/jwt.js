@@ -1,15 +1,24 @@
 import jwt from 'jsonwebtoken';
 
 export const generateToken = (payload) => {
-    return jwt.sign(
+    const access_token = jwt.sign(
             payload,
-            process.env.JWT_SECRETE,
+            process.env.JWT_ACCESS_SECRET,
             {
                 algorithm: "HS256",
-                expiresIn: process.env.JWT_EXP_IN
+                expiresIn: process.env.JWT_ACCESS_EXP_IN
             }
         );
-        return token;
+    
+    const refresh_token = jwt.sign(
+        payload,
+        process.env.JWT_REFRESH_SECRET,
+        {
+            algorithm: 'HS256',
+            expiresIn: process.env.JWT_REFRESH_EXP_IN
+        }
+    )
+    return {refresh_token, access_token}
 }
 
 
