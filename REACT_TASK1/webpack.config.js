@@ -14,7 +14,7 @@ module.exports = {
     hot: true,
     open: true,
 
-    historyApiFallback: true,   // when does not any route navigate to index.html
+    historyApiFallback: true,   // when does not any route navigate to index.html - for SPA routing
   },
   module: {
     rules: [

@@ -8,7 +8,9 @@ function Login() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
     const submitRequest = async() => {
+        setIsLoading(true)
         try{
             const response = await userLogin(username, password)
             if(response.success){
@@ -16,9 +18,9 @@ function Login() {
                 navigate('/todos')
             }
         }catch(err){
-
+            throw err
         }finally{
-
+            setIsLoading(false)
         }
     }
 
@@ -28,17 +30,14 @@ function Login() {
             <div className="min-h-screen flex fle-col items-center justify-center px-4 py-8 md:p-8">
                 <div className="grid items-center gapx-x-10 gap-y-16 max-w-6xl w-full lg:grid-cols-2">
                     <div className="max-w-lg max-lg:mx-auto">
-                        <a href="#"><img src="https://readymadeui.com/readymadeui-white.svg" alt="logo"
-                            className="lg:w-48 w-44 mb-12 inline-block" />
-                        </a>
-
+                    
                         <h2 className="text-4xl font-semibold !leading-tight text-slate-50">
                             Seamless Login for Exclusive Access
                         </h2>
                         <p className="text-base mt-6 text-slate-100 leading-relaxed">Immerse yourself in a hassle-free login journey with
                             our intuitively designed login form. Effortlessly access your account.</p>
 
-                        <div className="text-sm mt-12 text-slate-50">Don't have an account <a href="#"
+                        <div className="text-sm mt-12 text-slate-50">Don't have an account <a href="/register"
                             className="text-white font-semibold underline ml-1">Register here</a></div>
                     </div>
 

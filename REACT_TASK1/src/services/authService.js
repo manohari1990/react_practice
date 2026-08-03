@@ -12,3 +12,14 @@ export const userLogin = async(login, password) =>{
         throw err
     }
 }
+
+export const registerUser = async(formData) =>{
+    try{
+        const response = await fetch(`${HOST_URL}/auth/register`, {method: 'POST', headers: HEADERS, body: JSON.stringify(formData)})
+        if(!response.ok)
+            throw new Error("Could not create user, please try again!")
+        return await response.json()
+    }catch(err){
+        throw err
+    }
+}
