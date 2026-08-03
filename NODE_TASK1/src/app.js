@@ -8,7 +8,8 @@ const app = express()
 dotenv.config()
 
 app.use(cors({
-    origin: 'http://localhost:8000'
+    origin: 'http://localhost:8000',
+    credentials: true               // To enable the cookie sharing to client
 }))
 app.use(express.json())
 
