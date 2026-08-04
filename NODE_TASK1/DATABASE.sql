@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS user_sessions(
 	operating_system VARCHAR(100),
 	browser VARCHAR(100),
 	expires_at TIMESTAMPTZ NOT NULL,
-	refresh_token_hash TEXT NOT NULL,
+	refresh_token_hash TEXT,
 	created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMPTZ
 )

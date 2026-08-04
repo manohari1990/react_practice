@@ -35,7 +35,7 @@ export const userRegister = async (req, res) => {
 
 
 export const userLogin = async(req, res) =>{
-    const validateRes = validationResult(req)
+    const validateRes = validationResult(req)       // express-validator method to validate the request body
     if(!validateRes.isEmpty())
         return res.status(400).json({
                 success: false,
@@ -43,12 +43,10 @@ export const userLogin = async(req, res) =>{
                 error: validateRes.array()
             })
     try{
-        const userRequestDetails = buildSessionMetadata(req)
-        console.log(userRequestDetails, "===================userRequestDetails")
-        const {user, refresh_token, access_token} = await loginService(req.body)
-        const user_session = await saveUserSessionService({...userRequestDetails, 'refresh_token_hash': refresh_token, 'user_id': user.user_id})
-        console.log(user_session, "===================logincontroller")
-        const {password, ...userData} = user
+        const userRequestDetails = buildSessionMetadata(req)        // Extracts and returns user-agent properties
+        const {user, refresh_token, access_token} = await loginService(req.body)    // Perform fetching user based on username/email and returns user details and token
+        const user_session = await saveUserSessionService({...userRequestDetails, 'refresh_token_hash': refresh_token, 'user_id': user.user_id})    // Saves the new session into database with user-agent details and token & returns the new session details
+        const {password, user_id, ...userData} = user
         res.cookie(
             'access_token',access_token,
             {
@@ -91,7 +89,7 @@ export const userLogin = async(req, res) =>{
 
 export const userLogout = async(req, res) => {
     try{
-        const response = await userLogoutService(req.cookies)
+        const response = await userLogoutService(req.cookies)   // returns neccessary session details after user session(refresh_token_hash) updated in DB
         if(!response)
             return res.status(401).json({
                 success: false,

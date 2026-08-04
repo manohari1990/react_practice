@@ -36,17 +36,17 @@ export const userRegisterService = async (payload) => {
 }
 
 export const loginService = async(payload)=>{
-    const response = await userLoginRepo(payload)
+    const response = await userLoginRepo(payload)   // returns user details based on username or email
     if(!response)
         throw new AppError(401, "Invalid Username/Email or Password.", {});
 
-    const comparePassword = await bcrypt.compare(payload.password, response.password)
+    const comparePassword = await bcrypt.compare(payload.password, response.password)   // compares the user password & hashed password
     if(!comparePassword)
         throw new AppError(401, "Invalid Username/Email or Password.", {});
     if(response.user_status !== 'active')
         throw new AppError(401, "User status is unavailable, Please contact admin.",{});
 
-    const {refresh_token, access_token} = generateToken({
+    const {refresh_token, access_token} = generateToken({       // returns tokens 
         sub: response.user_id,
         username: response.username
     })
@@ -60,10 +60,10 @@ export const loginService = async(payload)=>{
 export const saveUserSessionService = async(payload) =>{
     const updatedPayload = {
         ...payload,
-        refresh_token_hash: await bcrypt.hash(payload.refresh_token_hash, 10)
+        refresh_token_hash: await bcrypt.hash(payload.refresh_token_hash, 10)       // hash the refresh token to safely store into DB
     }
     try{
-        const response = await saveUserSessionRepo(updatedPayload)
+        const response = await saveUserSessionRepo(updatedPayload)                  // saves the new user session and returns new session details
         return response
     }catch(err){
         console.error(err)
@@ -74,13 +74,13 @@ export const saveUserSessionService = async(payload) =>{
 
 export const userLogoutService = async(cookies) =>{
     try{
-        const {sub, username} = verifyToken(cookies)
-        const sessions = await getUserById(sub)
+        const {sub, username} = verifyToken(cookies)                                // extract the tokens from cookies and return sub/user_id & username
+        const sessions = await getUserById(sub)                                     // return user session from DB based on sub/user_id
         if(sessions.length > 0){
             for(const session of sessions){
                 const isMatched = await bcrypt.compare(cookies.refresh_token, session.refresh_token_hash)
                 if(isMatched){
-                    const updatedSession = await updateUserSessionRepo(session.session_id)
+                    const updatedSession = await updateUserSessionRepo(session.session_id)      // update the refresh_token_hash to null and returns the session details
                     return updatedSession
                 }
             }

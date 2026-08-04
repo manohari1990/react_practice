@@ -73,7 +73,7 @@ export const getUserById = async(sub) =>{
 }
 
 export const updateUserSessionRepo = async(sessionId) =>{
-    const sql = `UPDATE user_sessions SET refresh_token_hash = '' WHERE session_id = $1 RETURNING session_id, user_id, refresh_token_hash`
+    const sql = `UPDATE user_sessions SET refresh_token_hash = null WHERE session_id = $1 RETURNING session_id, user_id, refresh_token_hash`
     try{
         const response = await query(sql, [sessionId])
         return response.rows[0]

@@ -29,9 +29,9 @@ export function buildUpdateQuery(id, payload){
 }
 
 export const buildSessionMetadata = (request) => {
-    const device_detector = new DeviceDetector()
+    const device_detector = new DeviceDetector()        // device-detector-js instance to intialize with interface object
     const userAgent = request.headers['user-agent']
-    const details = device_detector.parse(userAgent)
+    const details = device_detector.parse(userAgent)    // extract user-agent properties
     const userRequestFrom = {
         device_type: details.device?.type,
         ip_address: request.ip,
@@ -42,3 +42,24 @@ export const buildSessionMetadata = (request) => {
     return userRequestFrom;
 }
 
+// export const setCookies =(res, cookieTitle, cookieValue ) =>{
+//     res.cookie(
+//         cookieTitle,cookieValue,
+//         {
+//             'httpOnly': true,
+//             'sameSite': 'lax',
+//             'maxAge': process.env.JWT_ACCESS_COOKIE_MAX_AGE,
+//             'secure': false
+//         }
+//     )
+//     res.cookie(
+//         cookieTitle,cookieValue,
+//         {
+//             'httpOnly': true,
+//             'sameSite': 'lax',
+//             'maxAge': process.env.JWT_REFRESH_COOKIE_MAX_AGE,
+//             'secure': false
+//         }
+//     )
+//     return res
+// }
