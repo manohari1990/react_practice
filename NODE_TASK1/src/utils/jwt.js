@@ -22,6 +22,12 @@ export const generateToken = (payload) => {
 }
 
 
-export const verifyToken = () => {
-
+export const verifyToken = (token) => {
+    try{
+        const obj = jwt.verify(token.access_token, process.env.JWT_ACCESS_SECRET)
+        return obj
+    }catch(err){
+        console.error(`ERROR: ${err}`)
+        throw err
+    }
 }

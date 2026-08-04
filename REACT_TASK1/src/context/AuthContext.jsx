@@ -21,11 +21,13 @@ export function AuthProvider({children}) {
     const login = (userSession) =>{
         setUser(userSession)
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userSession))
+        console.info("Login Successful!")
     }
 
     const logout = () =>{
         setUser(null)
         localStorage.removeItem(USER_STORAGE_KEY)
+        console.info("Logout Successful!")
     }
 
     const restoreUser = () =>{

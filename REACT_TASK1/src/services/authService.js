@@ -23,3 +23,14 @@ export const registerUser = async(formData) =>{
         throw err
     }
 }
+
+export const handleLogout = async() =>{
+    try{
+        const response = await fetch(`${HOST_URL}/auth/logout`, {method:'POST', headers: HEADERS, credentials:'include'})
+        if(!response.ok)
+            throw new Error("Logout request failed, please try again later!")
+        return await response.json()
+    }catch(err){
+        throw err
+    }
+}

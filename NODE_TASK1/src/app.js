@@ -3,6 +3,7 @@ import cors from 'cors';
 import todoRouter from './routes/todo.routes.js';
 import authRouter from './routes/auth.routes.js';
 import dotenv from 'dotenv';
+ import cookieParser from 'cookie-parser'
 
 const app = express()
 dotenv.config()
@@ -12,6 +13,7 @@ app.use(cors({
     credentials: true               // To enable the cookie sharing to client
 }))
 app.use(express.json())
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
     console.log("Todo App")

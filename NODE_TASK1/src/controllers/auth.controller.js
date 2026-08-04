@@ -1,5 +1,5 @@
 import { AppError } from '../config/AppError.js';
-import { userRegisterService, loginService, saveUserSessionService } from '../services/auth.service.js'
+import { userRegisterService, loginService, saveUserSessionService, userLogoutService } from '../services/auth.service.js'
 import { validationResult } from "express-validator";
 import {buildSessionMetadata} from '../utils/helpers.js'
 
@@ -44,11 +44,11 @@ export const userLogin = async(req, res) =>{
             })
     try{
         const userRequestDetails = buildSessionMetadata(req)
-        
+        console.log(userRequestDetails, "===================userRequestDetails")
         const {user, refresh_token, access_token} = await loginService(req.body)
         const user_session = await saveUserSessionService({...userRequestDetails, 'refresh_token_hash': refresh_token, 'user_id': user.user_id})
-
-        const {password, user_id, ...userData} = user
+        console.log(user_session, "===================logincontroller")
+        const {password, ...userData} = user
         res.cookie(
             'access_token',access_token,
             {
@@ -87,3 +87,44 @@ export const userLogin = async(req, res) =>{
         })
     }
 }
+
+
+export const userLogout = async(req, res) => {
+    try{
+        const response = await userLogoutService(req.cookies)
+        if(!response)
+            return res.status(401).json({
+                success: false,
+                message:'Invalid Request'
+            })
+        res.clearCookie(
+            'access_token',
+            {
+                'httpOnly': true,
+                'sameSite': 'lax',
+                'maxAge': new Date(0),
+                'secure': false
+            }
+        )
+        res.clearCookie(
+            'refresh_token',
+            {
+                'httpOnly': true,
+                'sameSite': 'lax',
+                'maxAge': new Date(0),
+                'secure': false
+            }
+        )
+        return res.status(200).json({
+            success: true,
+            message: "User has been logout successfully!"
+        })
+        
+    }catch(err){
+        return res.status(500).json({
+            success: false,
+            message: 'Logout request failed!'
+        })
+    }
+}
+

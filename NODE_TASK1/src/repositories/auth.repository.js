@@ -60,3 +60,24 @@ export const saveUserSessionRepo = async(payload) =>{
         throw err
     }
 }
+
+
+export const getUserById = async(sub) =>{
+    const sql = `SELECT * FROM user_sessions WHERE user_id = $1`
+    try{
+        const response = await query(sql, [sub])
+        return response.rows
+    }catch(err){
+        throw err
+    }
+}
+
+export const updateUserSessionRepo = async(sessionId) =>{
+    const sql = `UPDATE user_sessions SET refresh_token_hash = '' WHERE session_id = $1 RETURNING session_id, user_id, refresh_token_hash`
+    try{
+        const response = await query(sql, [sessionId])
+        return response.rows[0]
+    }catch(err){
+        throw err
+    }
+}

@@ -1,7 +1,7 @@
-import { userRegisterRepo, checkDuplicateUser, userLoginRepo, saveUserSessionRepo } from '../repositories/auth.repository.js'
+import { userRegisterRepo, checkDuplicateUser, userLoginRepo, saveUserSessionRepo, getUserById, updateUserSessionRepo } from '../repositories/auth.repository.js'
 import bcrypt from "bcrypt";
 import {AppError} from "../config/AppError.js"
-import { generateToken } from '../utils/jwt.js';
+import { generateToken, verifyToken } from '../utils/jwt.js';
 import {buildSessionMetadata} from '../utils/helpers.js'
 
 export const userRegisterService = async (payload) => {
@@ -49,7 +49,7 @@ export const loginService = async(payload)=>{
     const {refresh_token, access_token} = generateToken({
         sub: response.user_id,
         username: response.username
-    })    
+    })
     return {
         user: response,
         refresh_token,
@@ -58,8 +58,12 @@ export const loginService = async(payload)=>{
 }
 
 export const saveUserSessionService = async(payload) =>{
+    const updatedPayload = {
+        ...payload,
+        refresh_token_hash: await bcrypt.hash(payload.refresh_token_hash, 10)
+    }
     try{
-        const response = await saveUserSessionRepo(payload)
+        const response = await saveUserSessionRepo(updatedPayload)
         return response
     }catch(err){
         console.error(err)
@@ -68,3 +72,21 @@ export const saveUserSessionService = async(payload) =>{
 }
 
 
+export const userLogoutService = async(cookies) =>{
+    try{
+        const {sub, username} = verifyToken(cookies)
+        const sessions = await getUserById(sub)
+        if(sessions.length > 0){
+            for(const session of sessions){
+                const isMatched = await bcrypt.compare(cookies.refresh_token, session.refresh_token_hash)
+                if(isMatched){
+                    const updatedSession = await updateUserSessionRepo(session.session_id)
+                    return updatedSession
+                }
+            }
+        }
+        return false
+    }catch(err){
+        throw err
+    }
+}

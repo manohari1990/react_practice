@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userRegister, userLogin } from '../controllers/auth.controller.js';
+import { userRegister, userLogin, userLogout } from '../controllers/auth.controller.js';
 import { body } from "express-validator";
 
 const UserRegistrationRules = [
@@ -36,5 +36,6 @@ const authRouter = Router()
 
 authRouter.post('/register', UserRegistrationRules, userRegister)
 authRouter.post('/login', UserLoginRules, userLogin)
+authRouter.post('/logout', userLogout)
 
 export default authRouter
