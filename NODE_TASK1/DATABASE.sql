@@ -91,7 +91,7 @@ ON DELETE CASCADE;
 CREATE OR REPLACE FUNCTION set_expires_at_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
-	NEW.expires_at := NOW() + INTERVAL '15 minutes';
+	NEW.expires_at := NOW() + INTERVAL '60 minutes';
 	RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -107,4 +107,6 @@ EXECUTE FUNCTION set_expires_at_timestamp();
 -- Create the index for the foreign key user_id in user_sessions
 CREATE INDEX idx_sessions_user_id
 ON user_sessions(user_id)
-
+-- Create the index for the foreign key refresh_token_hash in user_sessions
+CREATE UNIQUE INDEX idx_sessions_refresh_token_hash
+ON user_sessions(refresh_token_hash)
