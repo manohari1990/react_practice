@@ -45,12 +45,13 @@ CREATE TYPE user_statuses AS enum('active', 'inactive', 'pending_activation', 's
 
 CREATE TABLE IF NOT EXISTS users(
 	user_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-	username VARCHAR(255) UNIQUE KEY,
-	email VARCHAR(255) UNIQUE KEY,
+	username VARCHAR(255) UNIQUE,
+	email VARCHAR(255) UNIQUE,
 	phone VARCHAR(20),
 	first_name VARCHAR(255) NOT NULL,
 	last_name VARCHAR(255),
-	password TEXT NOT NULL,
+	password_hash TEXT,
+	profile_image TEXT,
 	user_status user_statuses NOT NULL DEFAULT 'active',
 	created_at TIMESTAMPTZ DEFAULT current_timestamp,
 	updated_at TIMESTAMPTZ DEFAULT current_timestamp
@@ -73,17 +74,18 @@ CREATE TABLE IF NOT EXISTS user_sessions(
 	operating_system VARCHAR(100),
 	browser VARCHAR(100),
 	expires_at TIMESTAMPTZ NOT NULL,
+	revoked_at TIMESTAMPTZ,
 	refresh_token_hash TEXT,
 	created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMPTZ
 )
 
-
 ALTER TABLE user_sessions 
-ADD COLUMN user_id UUID,
+ADD COLUMN user_id UUID NOT NULL,
 ADD CONSTRAINT fk_sessions_user
 FOREIGN KEY (user_id) REFERENCES users(user_id)
 ON DELETE CASCADE;
+
 
 -- FUNCTION TO SET EXPIRES_AT TIME
 CREATE OR REPLACE FUNCTION set_expires_at_timestamp()
@@ -94,9 +96,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 -- CREATE TRIGGER ON RECORD INSERT OR UPDATE
 CREATE TRIGGER add_expires_at_trigger
-BEFORE INSERT OR UPDATE ON user_sessions
+BEFORE INSERT ON user_sessions
 FOR EACH ROW
 EXECUTE FUNCTION set_expires_at_timestamp();
+
+
+-- Create the index for the foreign key user_id in user_sessions
+CREATE INDEX idx_sessions_user_id
+ON user_sessions(user_id)
 
