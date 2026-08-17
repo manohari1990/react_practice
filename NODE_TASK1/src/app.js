@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import todoRouter from './routes/todo.routes.js';
 import authRouter from './routes/auth.routes.js';
+import userRouter from './routes/user.routes.js';
 import dotenv from 'dotenv';
  import cookieParser from 'cookie-parser'
 
@@ -14,6 +15,7 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(cookieParser())
+app.use("/uploads", express.static('uploads'))  // enables FE to read from server using HTTP URL
 
 app.get('/', (req, res) => {
     console.log("Todo App")
@@ -22,6 +24,7 @@ app.get('/', (req, res) => {
 
 app.use('/todos', todoRouter)
 app.use('/auth', authRouter)
+app.use('/user', userRouter)
 
 app.use((req, res) => {
     res.status(404).json({

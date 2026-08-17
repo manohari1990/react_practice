@@ -40,7 +40,7 @@ export const checkDuplicateUser = async(email, username) =>{
 
 
 export const userLoginRepo = async(payload)=>{
-    const sql = `SELECT ${NEW_UPDATE_USER_RETURN_FROM_DB.join(", ")}, password FROM users WHERE email = $1 OR username = $1`
+    const sql = `SELECT ${NEW_UPDATE_USER_RETURN_FROM_DB.join(", ")}, password_hash FROM users WHERE email = $1 OR username = $1`
     try{
         const response = await query(sql, [payload.login])
         if(response.rowCount > 0) 
@@ -81,3 +81,22 @@ export const updateUserSessionRepo = async(sessionId) =>{
         throw err
     }
 }
+
+
+/**
+ ** refresh query should conceptually validate all three **
+SELECT *
+FROM user_sessions
+WHERE refresh_token_hash = $1
+  AND revoked_at IS NULL
+  AND expires_at > NOW();
+
+  */
+
+
+/**
+ ** cleanup job **
+    DELETE FROM user_sessions
+    WHERE expires_at < NOW() - INTERVAL '30 days'
+        OR revoked_at < NOW() - INTERVAL '30 days';
+*/

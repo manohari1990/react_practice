@@ -40,7 +40,7 @@ export const loginService = async(payload)=>{
     if(!response)
         throw new AppError(401, "Invalid Username/Email or Password.", {});
 
-    const comparePassword = await bcrypt.compare(payload.password, response.password)   // compares the user password & hashed password
+    const comparePassword = await bcrypt.compare(payload.password, response.password_hash)   // compares the user password & hashed password
     if(!comparePassword)
         throw new AppError(401, "Invalid Username/Email or Password.", {});
     if(response.user_status !== 'active')

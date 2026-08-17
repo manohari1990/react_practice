@@ -46,7 +46,7 @@ export const userLogin = async(req, res) =>{
         const userRequestDetails = buildSessionMetadata(req)        // Extracts and returns user-agent properties
         const {user, refresh_token, access_token} = await loginService(req.body)    // Perform fetching user based on username/email and returns user details and token
         const user_session = await saveUserSessionService({...userRequestDetails, 'refresh_token_hash': refresh_token, 'user_id': user.user_id})    // Saves the new session into database with user-agent details and token & returns the new session details
-        const {password, user_id, ...userData} = user
+        const {password_hash, user_id, ...userData} = user
         res.cookie(
             'access_token',access_token,
             {

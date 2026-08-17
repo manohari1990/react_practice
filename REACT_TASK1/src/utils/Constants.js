@@ -84,6 +84,7 @@ export const TodoPriorityOption = [
 export const RECORDS_PER_PAGE = 10;
 export const MODEL_NAME = "gemini-3.6-flash";
 export const USER_STORAGE_KEY = 'user';
+export const HOST_URL = "http://localhost:5000";
 export const INITIAL_TODO_FORM  = {
     todo_id: "",
     title: "",

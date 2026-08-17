@@ -26,5 +26,6 @@ export const NEW_UPDATE_USER_RETURN_FROM_DB = [
     "last_name",
     "email",
     "phone",
-    "user_status"
+    "user_status",
+    "profile_image"
 ]
