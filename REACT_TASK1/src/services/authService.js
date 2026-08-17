@@ -34,3 +34,14 @@ export const handleLogout = async() =>{
         throw err
     }
 }
+
+export const authenticatedFetch = async() =>{
+    try{
+        const response = await fetch(`${HOST_URL}/auth/refresh`,{method: 'POST', headers: HEADERS, credentials: 'include'})
+        if(!response.ok)
+            throw new Error("Authentication Failed!")
+        return response.ok
+    }catch(err){
+        throw err
+    }
+}

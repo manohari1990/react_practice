@@ -50,6 +50,7 @@ export const loginService = async(payload)=>{
         sub: response.user_id,
         username: response.username
     })
+    // console.log(refresh_token, access_token,"=======================Tokens")
     return {
         user: response,
         refresh_token,
@@ -71,10 +72,9 @@ export const saveUserSessionService = async(payload) =>{
     }
 }
 
-
 export const userLogoutService = async(cookies) =>{
     try{
-        const {sub, username} = verifyToken(cookies)                                // extract the tokens from cookies and return sub/user_id & username
+        const {sub, username} = verifyToken(cookies.access_token)   // extract the tokens from cookies and return sub/user_id & username
         const sessions = await getUserById(sub)                                     // return user session from DB based on sub/user_id
         if(sessions.length > 0){
             for(const session of sessions){
@@ -82,6 +82,26 @@ export const userLogoutService = async(cookies) =>{
                 if(isMatched){
                     const updatedSession = await updateUserSessionRepo(session.session_id)      // update the refresh_token_hash to null and returns the session details
                     return updatedSession
+                }
+            }
+        }
+        return false
+    }catch(err){
+        throw err
+    }
+}
+
+export const refreshAuthService = async(cookies)=>{
+    try{
+        const {sub, username} = await verifyToken(cookies.refresh_token, "refresh_token")
+        if(sub){
+            const sessions = await getUserById(sub)
+            for(const session of sessions){
+                const isMatched = await bcrypt.compare(cookies.refresh_token, session.refresh_token_hash)
+                if(isMatched){
+                    const {access_token} = await generateToken({sub:sub, username: username})
+                    console.log(access_token, "=====================new accesstoken")
+                    return access_token
                 }
             }
         }

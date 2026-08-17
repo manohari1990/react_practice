@@ -1,5 +1,5 @@
 import { AppError } from '../config/AppError.js';
-import { userRegisterService, loginService, saveUserSessionService, userLogoutService } from '../services/auth.service.js'
+import { userRegisterService, loginService, saveUserSessionService, userLogoutService, refreshAuthService } from '../services/auth.service.js'
 import { validationResult } from "express-validator";
 import {buildSessionMetadata} from '../utils/helpers.js'
 
@@ -117,11 +117,41 @@ export const userLogout = async(req, res) => {
             success: true,
             message: "User has been logout successfully!"
         })
-        
     }catch(err){
         return res.status(500).json({
             success: false,
             message: 'Logout request failed!'
+        })
+    }
+}
+
+export const refreshAuthToken = async(req, res) =>{ 
+    try{
+        const response = await refreshAuthService(req.cookies)
+        if(!response)
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorised Request!"
+            })
+
+        res.cookie(
+            'access_token', 
+            response,
+            {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'lax',
+                maxAge: process.env.JWT_ACCESS_COOKIE_MAX_AGE
+            }
+        )
+        return res.status(200).json({
+            success: true,
+            message: "Token refreshed successfully!",
+        })
+    }catch(err){        // handle 401 unauth
+        res.status(500).json({
+            success: false,
+            message: "Internal server error!"
         })
     }
 }
