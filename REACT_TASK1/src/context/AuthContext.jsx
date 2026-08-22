@@ -5,8 +5,9 @@
 // Pass user and setUser through the provider value.
 
 // Don't add login(), logout(), localStorage, or useEffect yet.
-import { useState, createContext } from "react"
+import { useState, createContext, useEffect } from "react"
 import { USER_STORAGE_KEY } from "../utils/Constants"
+import { authenticatedFetch } from "../services/authService"
 
 // 1. Context
 export const AuthContext = createContext(null)
@@ -18,10 +19,33 @@ export function AuthProvider({children}) {
                                 return cachedUserData
                             })
 
+    useEffect(()=>{
+        const checkSession = async()=>{
+            try{
+                const resp = await authenticatedFetch()
+                if (resp && !resp.success) {
+                    logout();
+                }
+                // setUser(resp)
+            }catch(err){
+                setUser(null)
+                throw err
+            }
+        }
+        checkSession();
+    },[])
+
     const login = (userSession) =>{
         setUser(userSession)
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userSession))
         console.info("Login Successful!")
+    }
+
+    const updateUser = (updatedInfo) => {
+        console.log(updatedInfo,"====================updatedInfo")
+        setUser(JSON.stringify(updatedInfo))
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(updatedInfo))
+        console.info("User updated!")
     }
 
     const logout = () =>{
@@ -35,7 +59,7 @@ export function AuthProvider({children}) {
     }
 
     return(
-        <AuthContext.Provider value={{user, login, logout}}>
+        <AuthContext.Provider value={{user, updateUser, login, logout}}>
             {children}
         </AuthContext.Provider>
     )

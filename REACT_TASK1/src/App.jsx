@@ -6,6 +6,7 @@ import TemperatureConverter from './components/TemperatureConverter';
 import Greeting from './components/Greeting';
 import DummyPhotos from './components/DummyPhotos';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
 import { Route, Routes } from 'react-router-dom';
 import Register from './pages/Register';
 import Todo from './pages/Todo'
@@ -21,6 +22,11 @@ function App() {
           <Todo />
         </ProtectedRoute>
       } />
+      <Route path='/profile' element={
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      } />
       <Route path='/login' element={
         <PublicRoute>
           <Login />
@@ -31,7 +37,6 @@ function App() {
           <Register />
         </PublicRoute>
       } />
-      
     </Routes>
   )
 

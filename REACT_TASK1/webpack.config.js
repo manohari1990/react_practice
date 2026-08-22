@@ -13,7 +13,6 @@ module.exports = {
     port: 8000,
     hot: true,
     open: true,
-
     historyApiFallback: true,   // when does not any route navigate to index.html - for SPA routing
   },
   module: {
