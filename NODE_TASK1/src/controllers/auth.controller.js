@@ -125,7 +125,7 @@ export const userLogout = async(req, res) => {
     }
 }
 
-export const refreshAuthToken = async(req, res) =>{ 
+export const refreshAuthToken = async(req, res) =>{
     try{
         const response = await refreshAuthService(req.cookies)
         if(!response)
@@ -133,7 +133,6 @@ export const refreshAuthToken = async(req, res) =>{
                 success: false,
                 message: "Unauthorised Request!"
             })
-
         res.cookie(
             'access_token', 
             response,

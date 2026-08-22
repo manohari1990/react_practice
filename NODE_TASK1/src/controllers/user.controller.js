@@ -24,9 +24,5 @@ export const profilePicUpload = async(req, res) =>{
             error: "Internal server error!"
         })
     }
-
-    return res.status(200).json({
-        success: true
-    })
 }
 
