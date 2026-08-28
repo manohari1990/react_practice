@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+
+    runtime-versions:
+     nodejs: 24
+    commands:
+      - cd /NODE_TASK1
+      - npm ci
+
+    build:
+      commands:
+        - cd App/Nodeapp
+        # - npm test
+        - zip -r ../deployment.zip . -x  "*.env"
+
+artifacts:
+  files:
+    - deployment.zip

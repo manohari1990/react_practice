@@ -1,0 +1,45 @@
+1. Create new VPC
+	a. Create 2 public subnets
+	b. Create 4 private subnets
+	c. Create 1 Internet Gateway
+	d. Create 1/2 NAT gateway(s)
+
+2. Create 3 Security groups for following:
+	a. One is for Elastic beanstalk		- Inbounde - Provide only ALB access & Outbound - default
+	b. One for RDS PGSql				- Inbounde - Provide only elastic beanstalk access & Outbound - default
+	c. One for App load balancer(ALB) 	- Inbounde - open internet access & Outbound - default
+
+3. Create New RDS
+	a. Provide instance name and DB plateform as PGSql.
+	b. Public access = No
+	c. Provide master Username and Password and enable Password Auth required (In order to access the DB by app).
+	d. Attached the above VPC and 2 private subnets from different availability zones.
+	e. Attached the Security group created above.
+	f. We can create EC2 instance to access DB from another/local machine by pem access. In order to see DB table and run queries manually.
+	g. Can provide auto backup option during certain period.
+	h. After DB creation it provide Host, username & password. We can save it in environment files or best practice is to save in Secrets manager.
+
+4. Compress Node app
+	a. Update the DB connection details in application from env file or Secrets Manager, like, DB host, username, password, port, DB name.
+	b. Update the server port from env file.
+	c. Create the zip file for the app and make sure to exclude node_modules, .git & .env folders etc.
+
+5. Create Elastic beanstalk
+	a. Create new Environment with app name and Env name.
+	b. Upload zip file of Node app codebase. 
+	c. Import or provide environment variables key-value pairs.
+	d. Attached above VPC and 2 private subnets.
+	e. Enable Load balancer to auto manage the traffic and provide above VPC and 2 public subnets.
+	f. Attached Security group created above for EB & ALB.
+	g. This process creates - App Env, S3, load balancer, Autoscaling group & its policies, EC2 instance, cloudwatch alarms, Load Balancer listener
+
+6. Secrets Manager(Recommended)
+	a. This can be created directly while creating the DB or post DB creation manually.
+	b. Store all values for App and DB connection in a key-value pairs.
+
+7. EB deployment troubleshooting
+	a. Usually, while deployment we encounter failure due to bad request or npm installation.
+	b. Goto Environment -> Logs tab -> Request Logs and downlod the last 100 lines/Full logs.
+	c. Find the issue and fix accordingly and upload the app zip file again.
+
+8. Can obtain the Domain to ping the deployed application.

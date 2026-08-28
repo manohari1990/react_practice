@@ -77,10 +77,8 @@ export const userLogoutService = async(cookies) =>{
         const {sub, username} = verifyToken(cookies.access_token)   // extract the tokens from cookies and return sub/user_id & username
         const sessions = await getUserById(sub)                                     // return user session from DB based on sub/user_id
         if(sessions.length > 0){
-            console.log(sessions,"======================sessions")
             for(const session of sessions){
                 const isMatched = await bcrypt.compare(cookies.refresh_token, session.refresh_token_hash)
-                console.log(isMatched,"======================isMatched")
                 if(isMatched){
                     const updatedSession = await updateUserSessionRepo(session.session_id)      // update the refresh_token_hash to null and returns the session details
                     return updatedSession
@@ -99,9 +97,7 @@ export const refreshAuthService = async(cookies)=>{
         if(sub){
             const sessions = await getUserById(sub)
             for(const session of sessions){
-                console.log(session,"================session")
                 const isMatched = await bcrypt.compare(cookies.refresh_token, session.refresh_token_hash)
-                console.log(isMatched,"===================isMatched")
                 if(isMatched){
                     const {access_token} = await generateToken({sub: sub, username: username})
                     // console.log(access_token, "=====================new accesstoken")

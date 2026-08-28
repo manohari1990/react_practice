@@ -3,14 +3,12 @@ import cors from 'cors';
 import todoRouter from './routes/todo.routes.js';
 import authRouter from './routes/auth.routes.js';
 import userRouter from './routes/user.routes.js';
-import dotenv from 'dotenv';
- import cookieParser from 'cookie-parser'
+import cookieParser from 'cookie-parser'
 
 const app = express()
-dotenv.config()
 
 app.use(cors({
-    origin: 'http://localhost:8000',
+    origin: ['http://localhost:8000'],
     credentials: true               // To enable the cookie sharing to client
 }))
 app.use(express.json())
@@ -19,7 +17,7 @@ app.use("/uploads", express.static('uploads'))  // enables FE to read from serve
 
 app.get('/', (req, res) => {
     console.log("Todo App")
-    res.status(200).json("Todo App is running here")
+    res.end("Todo App is running here")
 })
 
 app.use('/todos', todoRouter)
