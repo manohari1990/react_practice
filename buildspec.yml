@@ -12,7 +12,7 @@ phases:
       - echo "Repository contents:"
       - ls -la
       - echo "App contents:"
-      - ls -la App
+      - ls -la .
       - echo "Nodeapp contents:"
       - ls -la ./NODE_TASK1
       - echo "Checking package files:"
