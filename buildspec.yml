@@ -6,6 +6,18 @@ phases:
     runtime-versions:
      nodejs: 24
     commands:
+
+      - echo "Current directory:"
+      - pwd
+      - echo "Repository contents:"
+      - ls -la
+      - echo "App contents:"
+      - ls -la App
+      - echo "Nodeapp contents:"
+      - ls -la ./NODE_TASK1
+      - echo "Checking package files:"
+      - ls -la ./NODE_TASK1/package*.json
+
       - cd ./NODE_TASK1
       - npm ci
 
