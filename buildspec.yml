@@ -6,12 +6,12 @@ phases:
     runtime-versions:
      nodejs: 24
     commands:
-      - cd /NODE_TASK1
+      - cd ./NODE_TASK1
       - npm ci
 
     build:
       commands:
-        - cd App/Nodeapp
+        - cd ./NODE_TASK1
         # - npm test
         - zip -r ../deployment.zip . -x  "*.env"
 
