@@ -6,15 +6,28 @@ phases:
     runtime-versions:
      nodejs: 24
     commands:
-      - cd ./NODE_TASK1
+      - echo "=== ROOT ==="
+      - pwd
+      - ls -la
+
+      - echo "=== NODE_TASK1 ==="
+      - ls -la NODE_TASK1
+
+      - echo "=== INSTALL ==="
+      - cd NODE_TASK1
       - npm ci
 
     build:
       commands:
-        - cd ./NODE_TASK1
+        - cd NODE_TASK1
         # - npm test
+        - echo "Creating deployment package..."
         - zip -r ../deployment.zip . -x  "*.env"
+        - echo "=== BACK TO ROOT ==="
         - cd ..
+        - pwd
+        - ls -lh
+        - echo "=== DEPLOYMENT ZIP ==="
         - ls -lh deployment.zip
 
 artifacts:
