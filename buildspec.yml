@@ -10,7 +10,7 @@ phases:
 
   build:
     commands:
-      - echo "Node.js application build completed successfully"
+      - echo "Node.js application build completed successfully!"
 
 artifacts:
   base-directory: NODE_TASK1
