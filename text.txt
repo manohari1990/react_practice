@@ -48,4 +48,5 @@ Phase 1 - Create initial Infrastructure
 
 Phase 2 - Automate the Deployment on Code push
 
-1. 
+1. Frontend & Backend both have monopoly git repo build or write buildspec.yml file with Backend path in mind.
+2. Write a buildspec.yml file with node Runtime version, phases - install, build and store artifacts into S3 bucket
