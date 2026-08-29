@@ -1,0 +1,83 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ElasticBeanstalk",
+            "Effect": "Allow",
+            "Action": [
+                "elasticbeanstalk:CreateApplicationVersion",
+                "elasticbeanstalk:DescribeApplicationVersions",
+                "elasticbeanstalk:UpdateEnvironment",
+                "elasticbeanstalk:DescribeEnvironments",
+                "elasticbeanstalk:DescribeEvents"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "CloudFormationRead",
+            "Effect": "Allow",
+            "Action": [
+                "cloudformation:GetTemplate",
+                "cloudformation:DescribeStackEvents",
+                "cloudformation:DescribeStacks",
+                "cloudformation:DescribeStackResources",
+                "cloudformation:DescribeStackResource"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "EC2AutoScalingRead",
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeScalingActivities",
+                "autoscaling:SuspendProcesses",
+                "autoscaling:ResumeProcesses"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "EC2LaunchTemplateRead",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeLaunchTemplates",
+                "ec2:DescribeLaunchTemplateVersions"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "ElasticBeanstalkS3Bucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketLocation",
+                "s3:GetBucketVersioning",
+                "s3:ListBucket",
+                "s3:GetBucketPolicy"
+            ],
+            "Resource": "arn:aws:s3:::elasticbeanstalk-us-east-1-<ACCOUNT-ID>"
+        },
+        {
+            "Sid": "ElasticBeanstalkS3Object",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:GetObjectVersion",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::elasticbeanstalk-us-east-1-<ACCOUNT-ID>/*"
+        },
+        {
+            "Sid": "CreateEBBucketIfRequired",
+            "Effect": "Allow",
+            "Action": [
+                "s3:CreateBucket"
+            ],
+            "Resource": "arn:aws:s3:::elasticbeanstalk-us-east-1-<ACCOUNT-ID>"
+        }
+    ]
+}
