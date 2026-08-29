@@ -1,3 +1,4 @@
+Phase 1 - Create initial Infrastructure
 1. Create new VPC
 	a. Create 2 public subnets
 	b. Create 4 private subnets
@@ -43,3 +44,8 @@
 	c. Find the issue and fix accordingly and upload the app zip file again.
 
 8. Can obtain the Domain to ping the deployed application.
+
+
+Phase 2 - Automate the Deployment on Code push
+
+1. 
