@@ -27,7 +27,7 @@ function AIInput({input, inputName, context, onAccept, htmlClass}){
             right: window.innerWidth - rect.width - rect.right - 100
         })
         try{
-            const generatedText = await generateAIText(finalPrompt)
+            const generatedText = "Demo AI Text..."//await generateAIText(finalPrompt)
             setGeneratedText(generatedText)
             setShowConfirm(true)
         }catch(e){
