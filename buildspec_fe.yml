@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 24
+    commands:
+      - cd ./REACT_TASK1
+      - npm ci
+
+  build:
+    commands:
+      - echo "building react app..."
+      - npm run build
+      - echo "App build completed!"
+
+artifacts:
+  base-directory: REACT_TASK1/dist
+  files: 
+    - '**/*'
