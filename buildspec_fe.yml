@@ -5,14 +5,21 @@ phases:
     runtime-versions:
       nodejs: 24
     commands:
-      - cd ./REACT_TASK1
-      - npm ci
+      - echo "Installing dependencies...."
+      - cd REACT_TASK1
+      - rm -rf node_modules package-lock.json
+      - npm install
 
   build:
     commands:
       - echo "building react app..."
       - npm run build
       - echo "App build completed!"
+  
+  post_build:
+    commands:
+      - echo "Invalidate Cloudfront...."
+      - aws cloudfront create-invalidation --distribution-id E2QRQVQDD1TKDH --paths "/*"
 
 artifacts:
   base-directory: REACT_TASK1/dist
