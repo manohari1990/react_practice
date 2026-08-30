@@ -5,9 +5,11 @@ phases:
     runtime-versions:
       nodejs: 24
     commands:
-      - echo "Installing dependencies...."
+      - echo "change directory...."
       - cd REACT_TASK1
+      - echo "removed exiting node_modules...."
       - rm -rf node_modules package-lock.json
+      - echo "installing new dependencies...."
       - npm install
 
   build:
@@ -18,7 +20,7 @@ phases:
   
   post_build:
     commands:
-      - echo "Invalidate Cloudfront...."
+      - echo "Invalidate Cloudfront....(Refreshing CDNs)"
       - aws cloudfront create-invalidation --distribution-id E2QRQVQDD1TKDH --paths "/*"
 
 artifacts:
